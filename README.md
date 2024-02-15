@@ -7,6 +7,6 @@ In the Angert lab, we have been studying P. sexstriatus for 20 years. Using pyro
 
 Now, we have generated illumina sequencing by synthesis data. This project is where we will process that data. 
 
-We have 12 samples (24 forward and reverse reads). Each forward or reverse read has a fastq.gzip. These files range from 4 MB to 7 MB. 
+We have 12 samples (24 forward and reverse reads). Each forward or reverse read has a fastq.gzip. These files range from 4 MB to 7 MB.  These samples are of section IV and section V of the intestinal tract. Section V has also been referred to as the hindgut. 
 
 Throughout the course, BIOMI 6300, I will update this README will my progress on this project.
