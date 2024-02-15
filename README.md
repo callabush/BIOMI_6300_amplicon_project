@@ -9,4 +9,6 @@ Now, we have generated illumina sequencing by synthesis data. This project is wh
 
 We have 12 samples (24 forward and reverse reads). Each forward or reverse read has a fastq.gzip. These files range from 4 MB to 7 MB.  These samples are of section IV and section V of the intestinal tract. Section V has also been referred to as the hindgut. 
 
+I also have 2 control samples, each with forward and reverse reads. This brings the total number of fastq files to 28.
+
 Throughout the course, BIOMI 6300, I will update this README will my progress on this project.
