@@ -1,0 +1,1 @@
+MultiQC complies fastQC reports.
