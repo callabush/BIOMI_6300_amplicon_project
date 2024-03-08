@@ -128,7 +128,7 @@ forward_filteredQual_plot_12 + reverse_filteredQual_plot_12
 ```{r raw-aggregate-plot, fig.width=5.5, fig.height=3.5, eval = FALSE, echo = TRUE}
 # Aggregate all QC plots 
 plotQualityProfile(forward_reads, aggregate = TRUE) + 
-  plotQualityProfile(forward_reads, aggregate = TRUE)
+  plotQualityProfile(reverse_reads, aggregate = TRUE)
 ```
 
 ## Prepare a placeholder for filtered reads
@@ -262,7 +262,7 @@ reverse_error_plot <-
 forward_error_plot + reverse_error_plot
 ```
 
-[Insert paragraph interpreting the plot above  above]
+Both the forward and reverse reads seem to fit the error models pretty well. A2T, C2T, G2T, and T2G seem to have slightly higher errors than expected. 
 
 - The error rates for each possible transition (A→C, A→G, …) are shown in the plot above. 
 
@@ -289,8 +289,10 @@ dada_reverse <- dada(filtered_reverse_reads,
 
 # Inspect 
 dada_reverse[1]
-dada_reverse[30]
+dada_reverse[13]
 ```
+
+### Sample 13 and 14 have low reads. These are our negative controls. 
 
 # Merge Forward & Reverse ASVs
 
@@ -336,11 +338,11 @@ data.frame(Seq_Length = nchar(getSequences(raw_ASV_table))) %>%
 ###################################################
 ###################################################
 # TRIM THE ASVS
-# Let's trim the ASVs to only be the right size, which is 249.
-# 249 originates from our expected amplicon of 252 - 3bp in the forward read due to low quality.
+# Let's trim the ASVs to only be the right size, which is 253.
+# 253 originates from our expected amplicon
 
 # We will allow for a few 
-raw_ASV_table_trimmed <- raw_ASV_table[,nchar(colnames(raw_ASV_table)) %in% 248:250]
+raw_ASV_table_trimmed <- raw_ASV_table[,nchar(colnames(raw_ASV_table)) %in% 252:254]
 
 # Inspect the distribution of sequence lengths of all ASVs in dataset 
 table(nchar(getSequences(raw_ASV_table_trimmed)))
@@ -354,7 +356,7 @@ data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
   ggplot(aes(x = Seq_Length )) + 
   geom_histogram() + 
   labs(title = "Trimmed distribution of ASV length")
-# Note the peak at 249 is ABOVE 3000
+
 
 # Let's zoom in on the plot 
 data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
@@ -366,6 +368,7 @@ data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
 
 Taking into account the lower, zoomed-in plot. Do we want to remove those extra ASVs?
 
+No, we will leave the extra ASVs at 252 and 254 basepairs. 
 
 # Remove Chimeras
 
@@ -393,7 +396,7 @@ data.frame(Seq_Length_NoChim = nchar(getSequences(noChimeras_ASV_table))) %>%
   ggplot(aes(x = Seq_Length_NoChim )) + 
   geom_histogram()+ 
   labs(title = "Trimmed + Chimera Removal distribution of ASV length")
-# Note the difference in the peak at 249, which is now BELOW 3000
+
 ```
 
 
@@ -447,13 +450,11 @@ track_counts_df %>%
 
 Here, we will use the silva database version 138!
 ```{r assign-tax}
-# The next line took 2 mins to run
 taxa_train <- 
   assignTaxonomy(noChimeras_ASV_table, 
                  "/workdir/in_class_data/taxonomy/silva_nr99_v138.1_train_set.fa.gz", 
                  multithread=TRUE)
 
-# the next line took 3 minutes 
 taxa_addSpecies <- 
   addSpecies(taxa_train, 
              "/workdir/in_class_data/taxonomy/silva_species_assignment_v138.1.fa.gz")
@@ -586,16 +587,6 @@ save(asv_tab, file = "data/01_DADA2/ASV_counts.RData")
 save(track_counts_df, file = "data/01_DADA2/track_read_counts.RData")
 ```
 
-# Check Render Time
-```{r stop-time}
-# Take the time now that we are at the end of the script
-end_time <- Sys.time()
-end_time 
-
-# Echo the elapsed time
-elapsed_time <- round((end_time - start_time), 3)
-elapsed_time
-```
 
 
 
