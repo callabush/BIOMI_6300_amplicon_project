@@ -108,19 +108,19 @@ Let's see the quality of the raw reads *before* we trim
 ```{r raw-quality-plot, fig.width=12, fig.height=8}
 # Randomly select 12 samples from dataset to evaluate 
 # Selecting 12 is typically better than 2 (like we did in class for efficiency)
-random_samples <- sample(1:length(reverse_reads), size = 12)
+random_samples <- sample(1:length(reverse_reads), size = 14)
 random_samples
 
 # Calculate and plot quality of these two samples
-forward_filteredQual_plot_12 <- plotQualityProfile(forward_reads[random_samples]) + 
+forward_filteredQual_plot_14 <- plotQualityProfile(forward_reads[random_samples]) + 
   labs(title = "Forward Read Raw Quality")
 
-reverse_filteredQual_plot_12 <- plotQualityProfile(reverse_reads[random_samples]) + 
+reverse_filteredQual_plot_14 <- plotQualityProfile(reverse_reads[random_samples]) + 
   labs(title = "Reverse Read Raw Quality")
 
 
 # Plot them together with patchwork
-forward_filteredQual_plot_12 + reverse_filteredQual_plot_12
+forward_filteredQual_plot_14 + reverse_filteredQual_plot_14
 
 ```
 
@@ -177,6 +177,7 @@ Parameters of filter and trim **DEPEND ON THE DATASET**
 filtered_reads <-
   filterAndTrim(fwd = forward_reads, filt = filtered_forward_reads,
               rev = reverse_reads, filt.rev = filtered_reverse_reads,
+              truncLen = c(245,230), trimLeft = c(9,9),
               maxN = 0, maxEE = c(1, 1),truncQ = 2, rm.phix = TRUE,
               compress = TRUE, multithread = TRUE)
 
@@ -191,23 +192,24 @@ filtered_reads <-
 
 ```{r filterTrim-quality-plots,  fig.width=12, fig.height=8}
 # Plot the 12 random samples after QC
-forward_filteredQual_plot_12 <- 
+forward_filteredQual_plot_14 <- 
   plotQualityProfile(filtered_forward_reads[random_samples]) + 
   labs(title = "Trimmed Forward Read Quality")
 
-reverse_filteredQual_plot_12 <- 
+reverse_filteredQual_plot_14 <- 
   plotQualityProfile(filtered_reverse_reads[random_samples]) + 
   labs(title = "Trimmed Reverse Read Quality")
 
 # Put the two plots together 
-forward_filteredQual_plot_12 + reverse_filteredQual_plot_12
+forward_filteredQual_plot_14 + reverse_filteredQual_plot_14
 ```
 
 ## Aggregated Trimmed Plots
 ```{r qc-aggregate-plot, fig.width=5.5, fig.height=3.5, eval = FALSE, echo = TRUE}
-#Aggregrate all QC plots
+#Aggregate all QC plots
 plotQualityProfile(filtered_forward_reads, aggregate = TRUE) + 
  plotQualityProfile(filtered_reverse_reads, aggregate = TRUE)
+
 ```
 
 ## Stats on read output from `filterAndTrim`
@@ -338,11 +340,11 @@ data.frame(Seq_Length = nchar(getSequences(raw_ASV_table))) %>%
 ###################################################
 ###################################################
 # TRIM THE ASVS
-# Let's trim the ASVs to only be the right size, which is 253.
-# 253 originates from our expected amplicon
+# Let's trim the ASVs to only be the right size, which is 236.
+# 236 originates from our expected amplicon being trimmed due to low quality at the ends
 
-# We will allow for a few 
-raw_ASV_table_trimmed <- raw_ASV_table[,nchar(colnames(raw_ASV_table)) %in% 252:254]
+# We will allow for only one length
+raw_ASV_table_trimmed <- raw_ASV_table[,nchar(colnames(raw_ASV_table)) %in% 236]
 
 # Inspect the distribution of sequence lengths of all ASVs in dataset 
 table(nchar(getSequences(raw_ASV_table_trimmed)))
@@ -357,18 +359,8 @@ data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
   geom_histogram() + 
   labs(title = "Trimmed distribution of ASV length")
 
-
-# Let's zoom in on the plot 
-data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
-  ggplot(aes(x = Seq_Length )) + 
-  geom_histogram() + 
-  labs(title = "Trimmed distribution of ASV length") + 
-  scale_y_continuous(limits = c(0, 500))
 ```
 
-Taking into account the lower, zoomed-in plot. Do we want to remove those extra ASVs?
-
-No, we will leave the extra ASVs at 252 and 254 basepairs. 
 
 # Remove Chimeras
 
