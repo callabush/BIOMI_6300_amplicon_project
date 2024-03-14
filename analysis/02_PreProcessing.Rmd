@@ -31,6 +31,8 @@ library(devtools)
 #devtools::install_github("joey711/phyloseq")
 library(phyloseq)
 library(tidyverse)
+#install.packages("openxlsx")
+library(openxlsx)
 ```
 
 # Goals
@@ -243,10 +245,12 @@ controlASV_physeq %>%
   plot_bar(., "ASV", fill = "ASV", facet_grid = Sample_or_Control~.)
 
 # Check tax of ASV 347, 527, 542, 609, 1000, 1087
-#controlASV_physeq %>%
-#  tax_table() %>%
-# data.frame() %>%
-# View()
+control_taxa <-
+controlASV_physeq %>%
+ tax_table() %>%
+ data.frame()
+
+write.csv(df, 'data/control_taxa.csv')
 
 # Would only like to keep ASV 347, 527, 542, 609, 1000, 1087, everything else is trash
 controlASVs_toREMOVE <- dplyr::setdiff(control_ASVs$ASV, c("ASV_347", "ASV_527",
