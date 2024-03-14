@@ -32,6 +32,16 @@ knitr::opts_chunk$set(echo = TRUE,
 set.seed(567890)
 ```
 
+### Load Libraries
+
+```{r load-libraries}
+# Efficient package loading with pacman 
+# Don't forget to install pacman and DT if you don't have it yet. :) 
+pacman::p_load(tidyverse, devtools, dada2, phyloseq, patchwork, DT, 
+               install = FALSE)
+```
+
+
 
 # Goals for this file
 
@@ -60,15 +70,6 @@ set.seed(567890)
 2. Taxonomy table `tax_table`
 
 3. Sample information: `sample_table` track the reads lost throughout DADA2 workflow.
-
-## Load Libraries
-
-```{r load-libraries}
-# Efficient package loading with pacman 
-# Don't forget to install pacman and DT if you don't have it yet. :) 
-pacman::p_load(tidyverse, devtools, dada2, phyloseq, patchwork, DT, 
-               install = FALSE)
-```
 
 
 ## Load Data
