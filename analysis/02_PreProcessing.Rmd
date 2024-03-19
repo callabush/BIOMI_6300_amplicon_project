@@ -250,19 +250,19 @@ controlASV_physeq %>%
  tax_table() %>%
  data.frame()
 
+
 write.csv(df, 'data/control_taxa.csv')
 
-# Would only like to keep ASV 347, 527, 542, 609, 1000, 1087, everything else is trash
+# Would only like to keep ASV 347, 527, 542, everything else is trash
 controlASVs_toREMOVE <- dplyr::setdiff(control_ASVs$ASV, c("ASV_347", "ASV_527",
-                                                           "ASV_542", "ASV_609",
-                                                           "ASV_1000", "ASV_1087"))
+                                                           "ASV_542"))
 # double check 
 length(controlASVs_toREMOVE)
 
 ### Make my new phloseq object 
 noControlsChlorosMitos_physeq <- 
   noChlorosMitos_physeq %>%
-  # Actually remove the control ASVs (except 18, 56)
+  # Actually remove the control ASVs (except ASV 347, 527, 542)
   subset_taxa(., !(ASV %in% controlASVs_toREMOVE)) %>%
   # Remove control samples 
   subset_samples(., !(names %in% control_samples))
