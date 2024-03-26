@@ -50,7 +50,7 @@ min(sample_sums(raw_preprocessed_physeq))
 # Setting colors for gut sections 
 gutsection_colors <- c(
   "IV" = "dodgerblue4",
-  "V" = "dodgerblue2")
+  "V" = "#D9CC3C")
 ```
 
 
@@ -103,8 +103,41 @@ colnames(color_df)[1] <- "names"
 # Check
 head(color_df)
 
-# END HERE 
+
+# Make a helper dataframe for plotting with colors 
+iNEXT_color_df <- 
+  color_df %>%
+  # Fix the names for merging
+  mutate(names = gsub(names, pattern = "[.]", replace = "-"),
+         names = gsub(names, pattern = "X",  replace = "")) %>%
+  # Merge with metadata
+  left_join(metadata_df, by = "names") #%>%
+  # Merge with colors for plotting with ggiNEXT
+  left_join(data.frame(gutsection_colors = gutsection_colors,
+            station = names(gutsection_colors)),
+            by = "gut_section")
 ```
+
+# Plot Rarefaction with `ggiNEXT`
+
+```{r ggiNEXT, fig.width=8, fig.height=3.5}
+# Plot rarefaction! 
+# rarefaction/extrapolation curve, type = 1 
+
+# Order q: 
+  # 0 = Richness/ Number of Total taxa
+  # 1 = Exponential Shannon / Number of "Common" taxa
+  # 2 = Inverse Simpson / Number of "Dominant" taxa 
+
+ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
+  facet_wrap(~Order.q, scales = "fixed") + 
+  scale_color_manual(values = iNEXT_color_df$station_colors, guide = FALSE) + 
+  scale_fill_manual(values = iNEXT_color_df$station_colors, guide = FALSE) + 
+  scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
+                     guide = FALSE) + 
+  theme(legend.position = "none")
+```
+
 
 # Session Information 
 ```{r session-info}
