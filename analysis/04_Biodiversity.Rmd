@@ -7,7 +7,7 @@ output:
     code_folding: show
     theme: spacelab
     highlight: pygments
-    keep_md: no
+    keep_md: yes
     toc: yes
     toc_float:
       collapsed: no
@@ -18,10 +18,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{setup}
+```{r setup}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.align = "center",
-                      fig.path = "../figures/04_Biodiversity/") # send any figure output to this folder 
+                      fig.path = "../figures/04_Biodiversity/",
+                      dev = "png", dpi = 200) 
+
+# send any figure output to this folder 
+
 ```
 
 # Setting the Environment 
@@ -51,7 +55,15 @@ min(sample_sums(raw_preprocessed_physeq))
 gutsection_colors <- c(
   "IV" = "dodgerblue4",
   "V" = "#D9CC3C")
+
+# Make metadata dataframe
+metadata_df <-
+  raw_preprocessed_physeq %>%
+  sample_data() %>%
+  data.frame()
+
 ```
+
 
 
 # Goals
@@ -111,10 +123,10 @@ iNEXT_color_df <-
   mutate(names = gsub(names, pattern = "[.]", replace = "-"),
          names = gsub(names, pattern = "X",  replace = "")) %>%
   # Merge with metadata
-  left_join(metadata_df, by = "names") #%>%
-  # Merge with colors for plotting with ggiNEXT
-  left_join(data.frame(gutsection_colors = gutsection_colors,
-            station = names(gutsection_colors)),
+  left_join(metadata_df, by = "names") %>%
+   #Merge with colors for plotting with ggiNEXT
+  left_join(y=data.frame(gutsection_colors = gutsection_colors,
+            gut_section = names(gutsection_colors)),
             by = "gut_section")
 ```
 
@@ -131,8 +143,8 @@ iNEXT_color_df <-
 
 ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
   facet_wrap(~Order.q, scales = "fixed") + 
-  scale_color_manual(values = iNEXT_color_df$station_colors, guide = FALSE) + 
-  scale_fill_manual(values = iNEXT_color_df$station_colors, guide = FALSE) + 
+  scale_color_manual(values = iNEXT_color_df$gutsection_colors, guide = FALSE) + 
+  scale_fill_manual(values = iNEXT_color_df$gutsection_colors, guide = FALSE) + 
   scale_shape_manual(values = base::rep(17, nsamples(raw_preprocessed_physeq)),
                      guide = FALSE) + 
   theme(legend.position = "none")
