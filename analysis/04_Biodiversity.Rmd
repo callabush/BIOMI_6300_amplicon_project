@@ -151,6 +151,61 @@ ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
 ```
 
 
+# Manually plot Diversity 
+
+## Rarefaction
+```{r iNEXT-manual}
+
+iNEXT_manual_df <- 
+  iNEXT_data$iNextEst$size_based %>%
+  dplyr::rename(names = Assemblage) %>%
+  # Fix the samples names 
+  mutate(names = gsub(names, pattern = "[.]", replace = "-"),
+         names = gsub(names, pattern = "X", replace = "")) %>%
+  # join with metadata 
+  left_join(., metadata_df, by = "names") %>%
+  # Add colors to data frame
+  left_join(., data.frame(gutsection_colors = gutsection_colors,
+                          gut_section = names(gutsection_colors)),
+            by = "gut_section") 
+
+# Inspect 
+dim(iNEXT_manual_df)
+str(iNEXT_manual_df)
+
+# Plot it - Rarefaction Curve 
+iNEXT_manual_df %>%
+  # Filter out rows that are calcaulted by rarefaction from iNEXT
+  dplyr::filter(Method == "Extrapolation") %>%
+  # Make the actual rarefaction plot with 
+  # the # of sequences on the x-axis and diversity on the y-axis
+  # You can choose to pick one diversity value or plot all three 
+  ggplot(aes(x = m, y= qD, color = gut_section, group = names)) + 
+  # line 
+  geom_line() + 
+  #geom_point() + 
+  # Challenge: Facet with gut section
+  facet_grid(Order.q~gut_section, scales = "fixed") + 
+  scale_color_manual(values = gutsection_colors) + 
+  theme(legend.position = "bottom")
+```
+
+
+# Diversity vs Gut Section 
+
+```{r div-vs-, fig.height=3.5, fig.width=6}
+
+iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed") %>%
+  ggplot(aes(x = gut_section, y = qD)) + 
+  facet_wrap(.~Order.q, scales = "free") + 
+  geom_point(aes(color = gut_section)) + 
+  stat_smooth() + 
+  labs(x = "Gut section", y = "# of ASVs") + 
+  scale_color_manual(values = gutsection_colors) + 
+  theme(legend.position = "bottom")
+```
+
 # Session Information 
 ```{r session-info}
 # Ensure reproducibility 

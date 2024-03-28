@@ -1,7 +1,7 @@
 ---
 title: "Phyloseq PreProcessing"
 author: "Calla Bush St George"
-date: "2024-03-27"
+date: "2024-03-28"
 output:
   html_document: 
     code_folding: show
@@ -266,6 +266,115 @@ ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
 <img src="../figures/04_Biodiversity/ggiNEXT-1.png" style="display: block; margin: auto;" />
 
 
+# Manually plot Diversity 
+
+## Rarefaction
+
+```r
+iNEXT_manual_df <- 
+  iNEXT_data$iNextEst$size_based %>%
+  dplyr::rename(names = Assemblage) %>%
+  # Fix the samples names 
+  mutate(names = gsub(names, pattern = "[.]", replace = "-"),
+         names = gsub(names, pattern = "X", replace = "")) %>%
+  # join with metadata 
+  left_join(., metadata_df, by = "names") %>%
+  # Add colors to data frame
+  left_join(., data.frame(gutsection_colors = gutsection_colors,
+                          gut_section = names(gutsection_colors)),
+            by = "gut_section") 
+
+# Inspect 
+dim(iNEXT_manual_df)
+```
+
+```
+## [1] 1440   33
+```
+
+```r
+str(iNEXT_manual_df)
+```
+
+```
+## 'data.frame':	1440 obs. of  33 variables:
+##  $ names              : chr  "568_4" "568_4" "568_4" "568_4" ...
+##  $ m                  : num  1 1362 2723 4084 5445 ...
+##  $ Method             : chr  "Rarefaction" "Rarefaction" "Rarefaction" "Rarefaction" ...
+##  $ Order.q            : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ qD                 : num  1 29.7 35.1 38.2 40.3 ...
+##  $ qD.LCL             : num  1 28.7 33.8 36.7 38.7 ...
+##  $ qD.UCL             : num  1 30.6 36.3 39.6 41.8 ...
+##  $ SC                 : num  0.304 0.994 0.997 0.998 0.999 ...
+##  $ SC.LCL             : num  0.3 0.994 0.997 0.998 0.999 ...
+##  $ SC.UCL             : num  0.309 0.995 0.997 0.998 0.999 ...
+##  $ host_species       : chr  "Pomacanthus sexstriatus" "Pomacanthus sexstriatus" "Pomacanthus sexstriatus" "Pomacanthus sexstriatus" ...
+##  $ gut_section        : chr  "IV" "IV" "IV" "IV" ...
+##  $ region             : chr  "Great Barrier Reef" "Great Barrier Reef" "Great Barrier Reef" "Great Barrier Reef" ...
+##  $ location           : chr  "South Island South" "South Island South" "South Island South" "South Island South" ...
+##  $ year               : int  2014 2014 2014 2014 2014 2014 2014 2014 2014 2014 ...
+##  $ month              : int  12 12 12 12 12 12 12 12 12 12 ...
+##  $ day                : int  12 12 12 12 12 12 12 12 12 12 ...
+##  $ sample_lab         : chr  "S246" "S246" "S246" "S246" ...
+##  $ Time               : chr  "15:30" "15:30" "15:30" "15:30" ...
+##  $ SL..mm.            : int  236 236 236 236 236 236 236 236 236 236 ...
+##  $ FL..mm.            : int  285 285 285 285 285 285 285 285 285 285 ...
+##  $ TW..g.             : num  654 654 654 654 654 ...
+##  $ GW..g.             : num  52.5 52.5 52.5 52.5 52.5 52.5 52.5 52.5 52.5 52.5 ...
+##  $ Sex                : chr  "M" "M" "M" "M" ...
+##  $ Sample_or_Control  : chr  "Sample" "Sample" "Sample" "Sample" ...
+##  $ input              : num  52502 52502 52502 52502 52502 ...
+##  $ filtered           : num  25983 25983 25983 25983 25983 ...
+##  $ denoisedF          : num  25713 25713 25713 25713 25713 ...
+##  $ denoisedR          : num  25724 25724 25724 25724 25724 ...
+##  $ merged             : num  24787 24787 24787 24787 24787 ...
+##  $ nochim             : num  24522 24522 24522 24522 24522 ...
+##  $ perc_reads_retained: num  46.7 46.7 46.7 46.7 46.7 ...
+##  $ gutsection_colors  : chr  "dodgerblue4" "dodgerblue4" "dodgerblue4" "dodgerblue4" ...
+```
+
+```r
+# Plot it - Rarefaction Curve 
+iNEXT_manual_df %>%
+  # Filter out rows that are calcaulted by rarefaction from iNEXT
+  dplyr::filter(Method == "Extrapolation") %>%
+  # Make the actual rarefaction plot with 
+  # the # of sequences on the x-axis and diversity on the y-axis
+  # You can choose to pick one diversity value or plot all three 
+  ggplot(aes(x = m, y= qD, color = gut_section, group = names)) + 
+  # line 
+  geom_line() + 
+  #geom_point() + 
+  # Challenge: Facet with gut section
+  facet_grid(Order.q~gut_section, scales = "fixed") + 
+  scale_color_manual(values = gutsection_colors) + 
+  theme(legend.position = "bottom")
+```
+
+<img src="../figures/04_Biodiversity/iNEXT-manual-1.png" style="display: block; margin: auto;" />
+
+
+# Diversity vs Gut Section 
+
+
+```r
+iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed") %>%
+  ggplot(aes(x = gut_section, y = qD)) + 
+  facet_wrap(.~Order.q, scales = "free") + 
+  geom_point(aes(color = gut_section)) + 
+  stat_smooth() + 
+  labs(x = "Gut section", y = "# of ASVs") + 
+  scale_color_manual(values = gutsection_colors) + 
+  theme(legend.position = "bottom")
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+```
+
+<img src="../figures/04_Biodiversity/div-vs--1.png" style="display: block; margin: auto;" />
+
 # Session Information 
 
 ```r
@@ -284,7 +393,7 @@ devtools::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-03-27
+##  date     2024-03-28
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
