@@ -1,7 +1,7 @@
 ---
 title: "Phyloseq PreProcessing"
 author: "Calla Bush St George"
-date: "2024-03-28"
+date: "2024-04-10"
 output:
   html_document: 
     code_folding: show
@@ -266,6 +266,8 @@ ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
 <img src="../figures/04_Biodiversity/ggiNEXT-1.png" style="display: block; margin: auto;" />
 
 
+My rarefaction curves and extrapolation looks like I would expect. Species diversity decreases as the hill numbers increase, which makes sense since the higher hill numbers represent taking into account more abundant samples. The range of species diversity is greater between my samples when I don't take into account the abundance of my samples.
+
 # Manually plot Diversity 
 
 ## Rarefaction
@@ -375,6 +377,8 @@ iNEXT_manual_df %>%
 
 <img src="../figures/04_Biodiversity/div-vs--1.png" style="display: block; margin: auto;" />
 
+This plot compares the relative number of ASVs to gut section (IV or V). Consistantly, gut section V has a higher amount of ASVs. This could be random, however it contradicts what we previously thought about the data. Our previous assumption was that gut section V was less diverse than gut section IV. I'm not sure how to parse this with gut section V having more ASVs. I thought that the number of ASVs was due to the illumina run but all the samples were run at the same time, to my knowledge.
+
 # Session Information 
 
 ```r
@@ -393,7 +397,7 @@ devtools::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-03-28
+##  date     2024-04-10
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
