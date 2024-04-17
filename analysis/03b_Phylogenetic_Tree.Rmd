@@ -88,6 +88,57 @@ kingdom_node_tree <-
 kingdom_node_tree
 ```
 
+```{r evaluate-long-branch}
+# Zoom in on tree: node 1420
+viewClade(kingdom_node_tree +
+          labs(title = "Unrooted Tree: Node 1420"),
+          node = 1420)
+# Zoom in on tree: node 94
+viewClade(kingdom_node_tree +
+          labs(title = "Unrooted Tree: Node 94") +
+            geom_text(aes(label = ASV)),
+          node = 94)
+
+```
+
+
+# Midroot Tree
+
+```{r midroot-tree}
+# Is the tree rooted? 
+new_unrooted_tree <- phy_tree(unrooted_physeq)
+is.rooted(new_unrooted_tree)
+
+# Let's midpoint root the tree
+midpoint_rooted_tree <-
+  midpoint.root(new_unrooted_tree)
+
+# Is the new tree rooted?
+is.rooted(midpoint_rooted_tree)
+
+# Assign to a new phyloseq object: merging subsetted phyloseq with the new rooted tree
+
+# 1. Create the phyloseq object
+physeq <-
+  raw_preprocessed_physeq
+
+# Merge tree with the new physeq_rm456
+midroot_physeq <-
+  merge_phyloseq(physeq, midpoint_rooted_tree)
+midroot_physeq
+
+# Quick Inspection of tree
+ggtree(midroot_physeq) + 
+  geom_tippoint(mapping = aes(color = Kingdom))
+```
+
+# Save to a new phyloseq object
+
+```{r save-physeq}
+# Save both phyloseq objects with our tree object to one .RData file
+save(list = c("unrooted_physeq", "midroot_physeq"),
+     file = "data/03_Phylogenetic_Tree/phytree_preprocessed_physeq.RData")
+```
 
 
 

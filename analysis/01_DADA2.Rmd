@@ -180,7 +180,7 @@ filtered_reads <-
               rev = reverse_reads, filt.rev = filtered_reverse_reads,
               truncLen = c(245,230), trimLeft = c(9,9),
               maxN = 0, maxEE = c(1, 1),truncQ = 2, rm.phix = TRUE,
-              compress = TRUE, multithread = TRUE)
+              compress = TRUE, multithread = 6)
 
 #These files are described in Kozich et al 2013 AEM
 # Describes library prep
