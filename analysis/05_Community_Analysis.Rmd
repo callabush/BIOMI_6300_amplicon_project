@@ -42,8 +42,9 @@ knitr::opts_chunk$set(echo = TRUE,
 
 ## Load Libraries
 ```{r load-packages}
-#install.packages("vegan")
-pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan,
+# Install packages if needed
+
+pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan, ggpubr, rstatix,
                install = FALSE)
 ```
 
@@ -51,7 +52,7 @@ pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan,
 ```{r load-colors}
 gut_section_colors <- c(
   "IV" = "dodgerblue4",
-  "V" = "#D9CC3C")
+  "V" = "#FF5733")
 ```
 
 
@@ -402,6 +403,451 @@ permutest(beta_bray_gut_section)
 ```
 
 Above, our variance is not impacted by gut section. 
+
+# Taxonomic Composition
+
+## Phylum
+```{r phylum-colors}
+# Set the phylum colors
+phylum_colors <- c(
+  Acidobacteriota = "navy", 
+  Actinobacteriota = "darkslategray2", 
+  Armatimonadota = "deeppink1",
+  Alphaproteobacteria = "plum2", 
+  Bacteroidota = "gold", 
+  Betaproteobacteria = "plum1", 
+  Bdellovibrionota = "red1",
+  Chloroflexi="black", 
+  Crenarchaeota = "firebrick",
+  Cyanobacteria = "limegreen",
+  Deltaproteobacteria = "grey", 
+  Desulfobacterota="magenta",
+  Fibrobacterota = "darkgreen",
+  Firmicutes = "#3E9B96",
+  Gammaproteobacteria = "greenyellow",
+  "Marinimicrobia (SAR406 clade)" = "yellow",
+  Myxococcota = "#B5D6AA",
+  Nitrospirota = "palevioletred1",
+  Proteobacteria = "royalblue",
+  Planctomycetota = "darkorange", 
+  Spirochaetota = "olivedrab",
+  Thermoplasmatota = "green",
+  Verrucomicrobiota = "darkorchid1")
+```
+
+#### Plot Phylum Composition
+```{r phylum-composition}
+# Goal is to calculate the phylum relative abundance
+# Note: the read depth must be normalized in some way: scaled_reads
+phylum_df <-
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level
+  tax_glom(taxrank = "Phylum") %>%
+  # Transform counts to relative abundance
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format
+  psmelt() %>%
+  # Filter out phyla that are less than one percent - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01)
+  # fix the order of date
+  
+# Stacked bar plot with all Phyla
+# Plot Phylum Abundances - make sure to load phylum_colors
+phylum_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  facet_grid(.~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+# Plot Phylum Abundances - make sure to load phylum_colors
+phylum_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+# Make each Phyla its own row
+#fixed scale
+phylum_df %>%
+  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  facet_grid(Phylum~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+# free scale
+phylum_df %>%
+  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  facet_grid(Phylum~gut_section, scale = "free") + 
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Phylum Composition") + 
+  scale_fill_manual(values = phylum_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+  
+# Narrow in on a specific group
+
+# Bacteroidota - y: abundance, x: gut section, dot plot + boxplot
+Bacteroidota_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Bacteroidota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Bacteroidota Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Bacteroidota_phylum
+
+# Cyanobacteria - y: abundance, x: gut section, dot plot + boxplot
+Cyanobacteria_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Cyanobacteria") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Cyanobacteria Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Cyanobacteria_phylum
+
+# Desulfobacterota - y: abundance, x: gut section, dot plot + boxplot
+Desulfobacterota_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Desulfobacterota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Desulfobacterota Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Desulfobacterota_phylum
+
+# Fibrobacterota - y: abundance, x: gut section, dot plot + boxplot
+Fibrobacterota_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Fibrobacterota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Fibrobacterota Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Fibrobacterota_phylum
+
+# Firmicutes - y: abundance, x: gut section, dot plot + boxplot
+Firmicutes_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Firmicutes") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Firmicutes Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Firmicutes_phylum
+
+# Proteobacteria - y: abundance, x: gut section, dot plot + boxplot
+Proteobacteria_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Proteobacteria") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Proteobacteria Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Proteobacteria_phylum
+
+# Spirochaetota- y: abundance, x: gut section, dot plot + boxplot
+Spirochaetota_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Spirochaetota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Spirochaetota Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+
+# Verrucomicrobiota - y: abundance, x: gut section, dot plot + boxplot
+Verrucomicrobiota_phylum <-
+  phylum_df %>%
+  dplyr::filter(Phylum == "Verrucomicrobiota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Verrucomicrobiota Phylum Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Verrucomicrobiota_phylum
+
+```
+
+### Combine Phylum Graphs
+```{r combine-phylum-graphs, fig.width=10, fig.height=8}
+ggarrange(Bacteroidota_phylum, Cyanobacteria_phylum, Desulfobacterota_phylum, 
+          Fibrobacterota_phylum, Firmicutes_phylum, Proteobacteria_phylum,
+          Spirochaetota_phylum, Verrucomicrobiota_phylum)
+```
+
+
+## Family
+
+```{r family-colors}
+# Set the phylum colors
+family_colors <- c(
+  Akkermansiaceae = "navy", 
+  Christensenellaceae = "darkslategray2", 
+  Clostridiaceae = "deeppink1",
+  Cyclobacteriaceae = "plum2", 
+  Desulfovibrionaceae = "gold", 
+  Endozoixomonadaceae = "plum1", 
+  Fibrobacteraceae = "red1",
+  Lachnospiraceae="black", 
+  Marinifilaceae = "firebrick",
+  Marinilabiliaceae = "limegreen",
+  Oscillospiraceae = "grey", 
+  Paludibacteraceae ="magenta",
+  Peptostreptococcaceae = "darkgreen",
+  Puniceicoccacaeae = "#3E9B96",
+  Rikenellaceae = "greenyellow",
+  "RS-E47 termite group" = "yellow",
+  Ruminococcaceae = "#B5D6AA",
+  Shewanellaceae = "palevioletred1",
+  Spirochaetaceae = "royalblue",
+  vandinBE97 = "darkorange", 
+  vanfinHA21 = "olivedrab",
+  Vibrionaceae = "greenyellow",
+  Victivallaceae = "darkorchid1")
+```
+
+
+```{r family-compostion}
+family_df <-
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level
+  tax_glom(taxrank = "Family") %>%
+  # Transform counts to relative abundance
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format
+  psmelt() %>%
+  # Filter out phyla that are less than one percent - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01)
+  
+
+# Plot family Abundances 
+family_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Family)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Family Composition") +
+  scale_fill_manual(values = family_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) 
+
+# Bacteroidota
+Bacteroidota_family <-
+  family_df %>%
+  dplyr::filter(Phylum == "Bacteroidota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Family, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Bacteroidota Family Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) 
+Bacteroidota_family
+
+# Desulfobacterota
+Desulfobacterota_family <-
+  family_df %>%
+  dplyr::filter(Phylum == "Desulfobacterota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Family, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Desulfobacterota Family Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means(method = "kruskal.test")
+Desulfobacterota_family
+
+# Firmicutes
+Firmicutes_family <-
+  family_df %>%
+  dplyr::filter(Phylum == "Firmicutes") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Family, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Firmicutes Family Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+Firmicutes_family
+
+
+# Proteobacteria
+Proteobacteria_family <-
+  family_df %>%
+  dplyr::filter(Phylum == "Proteobacteria") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Family, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Proteobacteria Family Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+
+# Verrucomicrobiota
+Verrucomicrobiota_family <-
+  family_df %>%
+  dplyr::filter(Phylum == "Verrucomicrobiota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Family, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Verrucomicrobiota Family Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+```
+
+
+## Species
+
+```{r species-compostion}
+species_df <-
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level
+  tax_glom(taxrank = "Species") %>%
+  # Transform counts to relative abundance
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format
+  psmelt() %>%
+  # Filter out phyla that are less than one percent - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01)
+  
+# Something is wrong with this graph
+species_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Species)) +
+  #facet_grid(.~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Species Composition") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+# Bacteroidota
+species_df %>%
+  dplyr::filter(Phylum == "Bacteroidota") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Bacteroidota species Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors) 
+
+# Firmicutes
+species_df %>%
+  dplyr::filter(Phylum == "Firmicutes") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Firmicutes species Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+
+# Proteobacteria
+species_df %>%
+  dplyr::filter(Phylum == "Proteobacteria") %>%
+  # build the plot
+  ggplot(aes(x = gut_section, y = Abundance,
+             fill = gut_section, color = gut_section)) + 
+  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  # outliers not plotted here in boxplot
+  geom_jitter() +
+  theme_bw() +
+  labs(title = "Proteobacteria species Abundance") +
+  scale_color_manual(values = gut_section_colors) +
+  scale_fill_manual(values = gut_section_colors)
+
+```
+
 
 # Session Information
  For Reproducibility
