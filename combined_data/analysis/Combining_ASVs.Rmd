@@ -58,26 +58,26 @@ noChimeras_ASV_table_angert <- noChimeras_ASV_table
 rm(noChimeras_ASV_table)
 
 # Load Soh ASV table
-load("combined_data/data/03_analysis_Soh/noChimeras_ASV_table.RData")
+load("combined_data/data/Soh_analysis/noChimeras_ASV_table.RData")
 noChimeras_ASV_table_soh <- noChimeras_ASV_table
 rm(noChimeras_ASV_table)
 
 
 # Load Bikrim ASV table
-load("combined_data/data/05_fullLength_analysis_Bikrim/noChimeras_ASV_table.RData")
+load("combined_data/data/Bikrim_analysis/noChimeras_ASV_table.RData")
 noChimeras_ASV_table_bikrim <- noChimeras_ASV_table
 rm(noChimeras_ASV_table)
 
 
 # Load Alessandro ASV tables
 ## Load 2011 Illumina run
-load("combined_data/data/05_2011_analysis_Alessandro/noChimeras_ASV_table.RData")
+load("combined_data/data/Alessandro_2011/noChimeras_ASV_table.RData")
 noChimeras_ASV_table_alessandro_2011 <- noChimeras_ASV_table
 rm(noChimeras_ASV_table)
 
 
 ## Load 2017 Illumina run 
-load("combined_data/data/06_2017_analysis_Alessandro/noChimeras_ASV_table.RData")
+load("combined_data/data/Alessandro_2017/noChimeras_ASV_table.RData")
 noChimeras_ASV_table_alessandro_2017 <- noChimeras_ASV_table
 rm(noChimeras_ASV_table)
 

@@ -776,13 +776,38 @@ Verrucomicrobiota_family <-
 ```
 
 
-## Species
+## Genus
+
+```{r genus-colors}
+# Set the phylum colors
+Genus_colors <- c(
+  Akkermansia = "navy", 
+  "Christensenellaceae R-7 group" = "darkslategray2", 
+  Alistipes = "deeppink1",
+  Aureibacter = "plum2", 
+  Endozoicomonas = "gold", 
+   Desulfobotulus= "plum1", 
+  Fibrobacter = "red1",
+  Desulfovibrio="black", 
+  "dgA-11 gut group" = "firebrick",
+  Epulopiscium = "limegreen",
+  Ferrimonas = "grey", 
+  Odoribacter ="magenta",
+  Rikenella = "greenyellow",
+  "Rikenellaceae RC9 gut group" = "yellow",
+  Ruminococcus = "#B5D6AA",
+  Romboustia = "palevioletred1",
+  Treponema = "royalblue",
+  Vibrio = "greenyellow",
+  Other = "darkgray")
+```
+
 
 ```{r species-compostion}
-species_df <-
+Genus_df <-
   scaled_rooted_physeq %>%
   # agglomerate at the phylum level
-  tax_glom(taxrank = "Species") %>%
+  tax_glom(taxrank = "Genus") %>%
   # Transform counts to relative abundance
   transform_sample_counts(function (x) {x/sum(x)}) %>%
   # Melt to a long format
@@ -790,59 +815,72 @@ species_df <-
   # Filter out phyla that are less than one percent - get rid of low abundant Phyla
   dplyr::filter(Abundance > 0.01)
   
-# Something is wrong with this graph
-species_df %>%
+# Facet by gut section
+Genus_df %>%
   # Warning: Its important to have one sample per x value,
   # Otherwise, it will take the sum between multiple samples
-  ggplot(aes(x = names, y = Abundance, fill = Species)) +
+  ggplot(aes(x = names, y = Abundance, fill = Genus)) +
+  facet_grid(.~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Gut Section Species Composition") +
+  scale_fill_manual(values = Genus_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+
+Genus_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Genus)) +
   #facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
   labs(title = "Gut Section Species Composition") +
+  scale_fill_manual(values = Genus_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 
 # Bacteroidota
-species_df %>%
+Genus_df %>%
   dplyr::filter(Phylum == "Bacteroidota") %>%
   # build the plot
   ggplot(aes(x = gut_section, y = Abundance,
              fill = gut_section, color = gut_section)) + 
-  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  facet_wrap(.~Genus, scales = "free_y", nrow = 1) +
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
   # outliers not plotted here in boxplot
   geom_jitter() +
   theme_bw() +
-  labs(title = "Bacteroidota species Abundance") +
+  labs(title = "Bacteroidota genus Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) 
 
 # Firmicutes
-species_df %>%
+Genus_df %>%
   dplyr::filter(Phylum == "Firmicutes") %>%
   # build the plot
   ggplot(aes(x = gut_section, y = Abundance,
              fill = gut_section, color = gut_section)) + 
-  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  facet_wrap(.~Genus, scales = "free_y", nrow = 1) +
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
   # outliers not plotted here in boxplot
   geom_jitter() +
   theme_bw() +
-  labs(title = "Firmicutes species Abundance") +
+  labs(title = "Firmicutes Genus Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors)
 
 # Proteobacteria
-species_df %>%
+Genus_df %>%
   dplyr::filter(Phylum == "Proteobacteria") %>%
   # build the plot
   ggplot(aes(x = gut_section, y = Abundance,
              fill = gut_section, color = gut_section)) + 
-  facet_wrap(.~Species, scales = "free_y", nrow = 1) +
+  facet_wrap(.~Genus, scales = "free_y", nrow = 1) +
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
   # outliers not plotted here in boxplot
   geom_jitter() +
   theme_bw() +
-  labs(title = "Proteobacteria species Abundance") +
+  labs(title = "Proteobacteria Genus Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors)
 
