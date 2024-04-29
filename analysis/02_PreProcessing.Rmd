@@ -18,7 +18,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.align = "center",
                       fig.path = "../figures/02_PreProcessing/") # send any figure output to this folder 
