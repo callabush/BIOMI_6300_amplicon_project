@@ -1,5 +1,5 @@
 ---
-title: "Phyloseq PreProcessing"
+title: "BioDiversity"
 author: "Calla Bush St George"
 date: "`r Sys.Date()`"
 output:
@@ -210,7 +210,7 @@ iNEXT_manual_df %>%
 
 This plot compares the relative number of ASVs to gut section (IV or V). Consistantly, gut section V has a higher amount of ASVs. This could be random, however it contradicts what we previously thought about the data. Our previous assumption was that gut section V was less diverse than gut section IV. I'm not sure how to parse this with gut section V having more ASVs. I thought that the number of ASVs was due to the illumina run but all the samples were run at the same time, to my knowledge.
 
-
+w
 # Session Information 
 ```{r session-info}
 # Ensure reproducibility 

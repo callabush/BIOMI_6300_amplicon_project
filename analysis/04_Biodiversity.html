@@ -11,9 +11,9 @@
 
 <meta name="author" content="Calla Bush St George" />
 
-<meta name="date" content="2024-04-29" />
+<meta name="date" content="2024-04-30" />
 
-<title>Phyloseq PreProcessing</title>
+<title>BioDiversity</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1678,9 +1678,9 @@ font-size: 0.95em;
 
 
 
-<h1 class="title toc-ignore">Phyloseq PreProcessing</h1>
+<h1 class="title toc-ignore">BioDiversity</h1>
 <h4 class="author">Calla Bush St George</h4>
-<h4 class="date">2024-04-29</h4>
+<h4 class="date">2024-04-30</h4>
 
 </div>
 
@@ -1708,12 +1708,12 @@ font-size: 0.95em;
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/02_PreProcessing/raw_preprocessed_physeq.RData&quot;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>raw_preprocessed_physeq</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 6015 taxa and 12 samples ]
+## otu_table()   OTU Table:         [ 1736 taxa and 12 samples ]
 ## sample_data() Sample Data:       [ 12 samples by 23 sample variables ]
-## tax_table()   Taxonomy Table:    [ 6015 taxa by 9 taxonomic ranks ]</code></pre>
+## tax_table()   Taxonomy Table:    [ 1736 taxa by 9 taxonomic ranks ]</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Intuition Check </span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">min</span>(<span class="fu">sample_sums</span>(raw_preprocessed_physeq))</span></code></pre></div>
-<pre><code>## [1] 7089</code></pre>
+<pre><code>## [1] 7131</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Setting colors for gut sections </span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>gutsection_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="st">&quot;IV&quot;</span> <span class="ot">=</span> <span class="st">&quot;dodgerblue4&quot;</span>,</span>
@@ -1744,7 +1744,7 @@ font-size: 0.95em;
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co"># Quick check</span></span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">dim</span>(iNEXT_input_df)</span></code></pre></div>
-<pre><code>## [1] 6015   12</code></pre>
+<pre><code>## [1] 1736   12</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Run iNEXT: Calculate the Hill Numbers </span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co"># Note that: Species in ROWS, Samples in COLUMNS </span></span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co"># Remember to set the seed! </span></span>
@@ -1969,9 +1969,7 @@ than gut section IV. I’m not sure how to parse this with gut section V
 having more ASVs. I thought that the number of ASVs was due to the
 illumina run but all the samples were run at the same time, to my
 knowledge.</p>
-</div>
-<div id="session-information" class="section level1">
-<h1>Session Information</h1>
+<p>w # Session Information</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># Ensure reproducibility </span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">session_info</span>()</span></code></pre></div>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
@@ -1984,7 +1982,7 @@ knowledge.</p>
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-04-29
+##  date     2024-04-30
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────

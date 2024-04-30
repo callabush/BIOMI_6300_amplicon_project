@@ -1,7 +1,7 @@
 ---
-title: "Phyloseq PreProcessing"
+title: "BioDiversity"
 author: "Calla Bush St George"
-date: "2024-04-29"
+date: "2024-04-30"
 output:
   html_document: 
     code_folding: show
@@ -53,9 +53,9 @@ raw_preprocessed_physeq
 
 ```
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 6015 taxa and 12 samples ]
+## otu_table()   OTU Table:         [ 1736 taxa and 12 samples ]
 ## sample_data() Sample Data:       [ 12 samples by 23 sample variables ]
-## tax_table()   Taxonomy Table:    [ 6015 taxa by 9 taxonomic ranks ]
+## tax_table()   Taxonomy Table:    [ 1736 taxa by 9 taxonomic ranks ]
 ```
 
 ```r
@@ -64,7 +64,7 @@ min(sample_sums(raw_preprocessed_physeq))
 ```
 
 ```
-## [1] 7089
+## [1] 7131
 ```
 
 ```r
@@ -103,7 +103,7 @@ dim(iNEXT_input_df)
 ```
 
 ```
-## [1] 6015   12
+## [1] 1736   12
 ```
 
 ```r
@@ -379,7 +379,7 @@ iNEXT_manual_df %>%
 
 This plot compares the relative number of ASVs to gut section (IV or V). Consistantly, gut section V has a higher amount of ASVs. This could be random, however it contradicts what we previously thought about the data. Our previous assumption was that gut section V was less diverse than gut section IV. I'm not sure how to parse this with gut section V having more ASVs. I thought that the number of ASVs was due to the illumina run but all the samples were run at the same time, to my knowledge.
 
-
+w
 # Session Information 
 
 ```r
@@ -398,7 +398,7 @@ devtools::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-04-29
+##  date     2024-04-30
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
