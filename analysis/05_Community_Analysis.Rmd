@@ -803,7 +803,7 @@ Genus_colors <- c(
 ```
 
 
-```{r species-compostion}
+```{r genus-compostion}
 Genus_df <-
   scaled_rooted_physeq %>%
   # agglomerate at the phylum level
@@ -822,7 +822,7 @@ Genus_df %>%
   ggplot(aes(x = names, y = Abundance, fill = Genus)) +
   facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
-  labs(title = "Gut Section Species Composition") +
+  labs(title = "Gut Section Genus Composition") +
   scale_fill_manual(values = Genus_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
@@ -834,7 +834,7 @@ Genus_df %>%
   ggplot(aes(x = names, y = Abundance, fill = Genus)) +
   #facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
-  labs(title = "Gut Section Species Composition") +
+  labs(title = "Gut Section Genus Composition") +
   scale_fill_manual(values = Genus_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
