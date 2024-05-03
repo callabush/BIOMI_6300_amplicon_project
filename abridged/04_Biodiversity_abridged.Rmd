@@ -1,5 +1,5 @@
 ---
-title: "Phyloseq PreProcessing"
+title: "Phyloseq PreProcessing - abridged"
 author: "Calla Bush St George"
 date: "`r Sys.Date()`"
 output:
@@ -56,10 +56,6 @@ pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,
 load("data/02_PreProcessing/raw_preprocessed_physeq.RData")
 raw_preprocessed_physeq
 
-# Intuition Check 
-min(sample_sums(raw_preprocessed_physeq))
-
-
 # Setting colors for gut sections 
 gutsection_colors <- c(
   "IV" = "dodgerblue4",
@@ -81,8 +77,6 @@ iNEXT_input_df <-
   raw_preprocessed_physeq %>%
   otu_table() %>%
   data.frame()
-# Quick check
-dim(iNEXT_input_df)
 
 # Run iNEXT: Calculate the Hill Numbers 
 # Note that: Species in ROWS, Samples in COLUMNS 
@@ -110,9 +104,6 @@ color_df <-
 head(color_df)
 # Rename the column 
 colnames(color_df)[1] <- "names"
-# Check
-head(color_df)
-
 
 # Make a helper dataframe for plotting with colors 
 iNEXT_color_df <- 
@@ -169,8 +160,6 @@ iNEXT_manual_df <-
                           gut_section = names(gutsection_colors)),
             by = "gut_section") 
 
-# Inspect 
-dim(iNEXT_manual_df)
 
 # Plot it - Rarefaction Curve 
 iNEXT_manual_df %>%
@@ -191,7 +180,7 @@ iNEXT_manual_df %>%
 # Diversity vs Gut Section 
 
 ```{r div-vs-, fig.height=3.5, fig.width=6}
-
+# Diversity and gut section
 iNEXT_manual_df %>%
   dplyr::filter(Method == "Observed") %>%
   ggplot(aes(x = gut_section, y = qD)) + 

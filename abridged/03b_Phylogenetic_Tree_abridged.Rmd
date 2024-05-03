@@ -21,7 +21,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.align = "center",
-                      fig.path = "../figures/03_Phylogenetic_Tree")
+                      fig.path = "../figures/03_Phylogenetic_Tree/")
 ```
 
 

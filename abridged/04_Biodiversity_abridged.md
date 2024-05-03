@@ -1,7 +1,7 @@
 ---
-title: "Phyloseq PreProcessing"
+title: "Phyloseq PreProcessing - abridged"
 author: "Calla Bush St George"
-date: "2024-04-12"
+date: "2024-05-03"
 output:
   html_document: 
     code_folding: show
@@ -60,15 +60,6 @@ raw_preprocessed_physeq
 ```
 
 ```r
-# Intuition Check 
-min(sample_sums(raw_preprocessed_physeq))
-```
-
-```
-## [1] 7131
-```
-
-```r
 # Setting colors for gut sections 
 gutsection_colors <- c(
   "IV" = "dodgerblue4",
@@ -90,15 +81,7 @@ iNEXT_input_df <-
   raw_preprocessed_physeq %>%
   otu_table() %>%
   data.frame()
-# Quick check
-dim(iNEXT_input_df)
-```
 
-```
-## [1] 1736   12
-```
-
-```r
 # Run iNEXT: Calculate the Hill Numbers 
 # Note that: Species in ROWS, Samples in COLUMNS 
 # Remember to set the seed! 
@@ -140,21 +123,7 @@ head(color_df)
 ```r
 # Rename the column 
 colnames(color_df)[1] <- "names"
-# Check
-head(color_df)
-```
 
-```
-##    names
-## 1 X568_4
-## 2 X568_5
-## 3 X581_5
-## 4 X611_5
-## 5  E03_5
-## 6  E05_5
-```
-
-```r
 # Make a helper dataframe for plotting with colors 
 iNEXT_color_df <- 
   color_df %>%
@@ -220,15 +189,7 @@ iNEXT_manual_df <-
                           gut_section = names(gutsection_colors)),
             by = "gut_section") 
 
-# Inspect 
-dim(iNEXT_manual_df)
-```
 
-```
-## [1] 1440   33
-```
-
-```r
 # Plot it - Rarefaction Curve 
 iNEXT_manual_df %>%
   # Filter out rows that are calcaulted by rarefaction from iNEXT
@@ -251,6 +212,7 @@ iNEXT_manual_df %>%
 
 
 ```r
+# Diversity and gut section
 iNEXT_manual_df %>%
   dplyr::filter(Method == "Observed") %>%
   ggplot(aes(x = gut_section, y = qD)) + 
@@ -288,13 +250,13 @@ devtools::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-04-12
+##  date     2024-05-03
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package          * version    date (UTC) lib source
 ##  ade4               1.7-22     2023-02-06 [1] CRAN (R 4.3.2)
-##  ape                5.7-1      2023-03-13 [2] CRAN (R 4.3.2)
+##  ape                5.8        2024-04-11 [1] CRAN (R 4.3.2)
 ##  Biobase            2.62.0     2023-10-24 [2] Bioconductor
 ##  BiocGenerics       0.48.1     2023-11-01 [2] Bioconductor
 ##  biomformat         1.30.0     2023-10-24 [1] Bioconductor

@@ -123,7 +123,7 @@ forward_filteredQual_plot_14 + reverse_filteredQual_plot_14
 ```
 
 ### Aggregated Raw Quality Plots 
-```{r raw-aggregate-plot, fig.width=5.5, fig.height=3.5, eval = FALSE, echo = TRUE}
+```{r raw-aggregate-plot, fig.width=5.5, fig.height=3.5}
 # Aggregate all QC plots 
 plotQualityProfile(forward_reads, aggregate = TRUE) + 
   plotQualityProfile(reverse_reads, aggregate = TRUE)
@@ -131,7 +131,7 @@ plotQualityProfile(forward_reads, aggregate = TRUE) +
 
 ## Prepare a placeholder for filtered reads
 
-```{r prep-filtered-reads}
+```{r prep-filtered-reads, include = FALSE}
 # vector of our samples, extract the sample information from our file
 samples <- sapply(strsplit(basename(forward_reads), "_"),
                   function(x)paste(x[1],x[2],sep="_"))
@@ -292,9 +292,6 @@ dada_forward <- dada(filtered_forward_reads,
 #Infer reverse ASVs
 dada_reverse <- dada(filtered_reverse_reads, 
                      err = error_reverse_reads, multithread = TRUE)
-
-# Inspect 
-dada_reverse[1]
 ```
 
 ### Sample 13 and 14 have low reads. These are our negative controls. 
@@ -539,11 +536,11 @@ stopifnot(asv_tax$ASV == rownames(asv_tax), rownames(asv_tax) == rownames(asv_ta
 Now, we will write the files! We will write the following to the `data/01_DADA2/` folder. We will save both as files that could be submitted as supplements AND as .RData objects for easy loading into the next steps into R.:  
 
 1. `ASV_counts.tsv`: ASV count table that has ASV names that are re-written and shortened headers like ASV_1, ASV_2, etc, which will match the names in our fasta file below. This will also be saved as `data/01_DADA2/ASV_counts.RData`.
-2. `ASV_counts_withSeqNames.tsv`: This is generated with the data object in this file known as `noChimeras_ASV_table`. ASV headers include the *entire* ASV sequence ~250bps.  In addition, we will save this as a .RData object as `data/01_DADA2/noChimeras_ASV_table.RData` as we will use this data in `analysis/02_Taxonomic_Assignment.Rmd` to assign the taxonomy from the sequence headers.  
+2. `ASV_counts_withSeqNames.tsv`: This is generated with the data object in this file known as `noChimeras_ASV_table`. ASV headers include the *entire* ASV sequence ~250bps.  In addition, we will save this as a .RData object as `data/01_DADA2/noChimeras_ASV_table.RData` as we will use this data in `analysis/02_PreProcessing.Rmd` to assign the taxonomy from the sequence headers.  
 3. `ASVs.fasta`: A fasta file output of the ASV names from `ASV_counts.tsv` and the sequences from the ASVs in `ASV_counts_withSeqNames.tsv`. A fasta file that we can use to build a tree for phylogenetic analyses (e.g. phylogenetic alpha diversity metrics or UNIFRAC dissimilarty).  
 4. We will also make a copy of `ASVs.fasta` in `data/02_TaxAss_FreshTrain/` to be used for the taxonomy classification in the next step in the workflow.  
 5. Write out the taxonomy table
-6. `track_read_counts.RData`: To track how many reads we lost throughout our workflow that could be used and plotted later. We will add this to the metadata in `analysis/02_Taxonomic_Assignment.Rmd`.   
+6. `track_read_counts.RData`: To track how many reads we lost throughout our workflow that could be used and plotted later. We will add this to the metadata in `analysis/02_PreProcessing.Rmd`.   
 
 
 ```{r save-files}
