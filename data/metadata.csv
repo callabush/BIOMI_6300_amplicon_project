@@ -1,0 +1,15 @@
+﻿names,host_species,gut_section,region,location,year,month,day,sample_lab,Time,SL (mm),FL (mm),TW (g),GW (g),Sex,Sample_or_Control
+611_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Between South Island and Palfrey Island,2014,12,18,S248,09:45,210,256,493,391.5,M,Sample
+581_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Palfrey Island North,2014,12,14,S247,16:45,190,235,381.1,308.6,F,Sample
+568_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Between Bird Islet and South Island,2014,12,12,S346,15:30,236,285,654.3,52.5,M,Sample
+568_4,Pomacanthus sexstriatus,IV,Great Barrier Reef,South Island South,2014,12,12,S246,15:30,236,285,654.3,52.5,M,Sample
+Neg1_S148,,,,,,,,S148,,,,,,,Control
+Neg2_S249,,,,,,,,S249,,,,,,,Control
+E3_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Tuttle Beach,2011,3,18,S145,15:45,,,,308,M,Sample
+E3_4,Pomacanthus sexstriatus,IV,Great Barrier Reef,Tuttle Beach,2011,3,18,S144,15:45,,,,308,M,Sample
+E2_5,Pomacanthus sexstriatus,V,Great Barrier Reef,North Direction Island,2011,3,18,S143,10:30,,,,575,F,Sample
+E2_4,Pomacanthus sexstriatus,IV,Great Barrier Reef,North Direction Island,2011,3,18,S142,10:30,,,,575,F,Sample
+E1_5,Pomacanthus sexstriatus,V,Great Barrier Reef,North Direction Island,2011,3,18,S141,09:40,,,,1262,M,Sample
+E1_4,Pomacanthus sexstriatus,IV,Great Barrier Reef,North Direction Island,2011,3,18,S140,09:40,,,,1262,M,Sample
+E05_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Granite Bluffs,2005,3,22,S147,09:00,,,,656,,Sample
+E03_5,Pomacanthus sexstriatus,V,Great Barrier Reef,Bommie Bay,2003,10,18,S146,10:00,,,,,,Sample
