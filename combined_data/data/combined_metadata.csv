@@ -1,3 +1,92 @@
+Run,BioSample,AvgSpotLen,Bases,Bytes,Collection_Date,env_local_scale,env_medium,Experiment,Host_Diet,Host,Library Name,create_date,Sample Name,replicate,Region,Location,Time,SL (mm),FL (mm),TW (g),GW (g),Sex,Sample_or_Control
+568_4,S246,,,,12/12/14,hindgut section IV,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,South Island South,15:30,236,285,654.3,52.5,M,Sample
+568_5,S346,,,,12/12/14,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Between Bird Islet and South Island,15:30,236,285,654.3,52.5,M,Sample
+581_5,S247,,,,12/14/14,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Palfrey Island North,16:45,190,235,381.1,308.6,F,Sample
+611_5,S248,,,,12/18/14,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Between South Island and Palfrey Island,09:45,210,256,493,391.5,M,Sample
+E03_5,S146,,,,10/18/03,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Bommie Bay,10:00,,,,,,Sample
+E1_4,S140,,,,3/18/11,hindgut section IV,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,North Direction Island,09:40,,,,1262,M,Sample
+E1_5,S141,,,,3/18/11,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,North Direction Island,09:40,,,,1262,M,Sample
+E2_4,S142,,,,3/18/11,hindgut section IV,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,North Direction Island,10:30,,,,575,F,Sample
+E2_5,S143,,,,3/18/11,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,North Direction Island,10:30,,,,575,F,Sample
+E3_4,S144,,,,3/18/11,hindgut section IV,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Tuttle Beach,15:45,,,,308,M,Sample
+E3_5,S145,,,,3/18/11,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Tuttle Beach,15:45,,,,308,M,Sample
+Neg1_S148,S148,,,,,,,,,,,,,,,,,,,,,,Control
+Neg2_S249,S249,,,,,,,,,,,,,,,,,,,,,,Control
+SRR19856781,SAMN29361048,151,8.20 M,4.79 Mb,2019,,,SRX15900449,,Pomacanthus annularis,LF015e.M4,2022-06-2702:15:00Z,LF015e.M4,biological replicate 2,,,,,,,,,Sample
+SRR19856782,SAMN29361047,151,4.13 M,2.47 Mb,2019,,,SRX15900448,,Pomacanthus annularis,LF014e.M4,2022-06-2702:15:00Z,LF014e.M4,biological replicate 1,,,,,,,,,Sample
+ERR3585830,SAMEA6061588,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585831,SAMEA6061589,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585832,SAMEA6061590,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585833,SAMEA6061591,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585834,SAMEA6061592,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585835,SAMEA6061593,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585836,SAMEA6061594,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585837,SAMEA6061595,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585838,SAMEA6061596,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585839,SAMEA6061597,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585840,SAMEA6061598,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585841,SAMEA6061599,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585842,SAMEA6061600,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585843,SAMEA6061601,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585844,SAMEA6061602,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585845,SAMEA6061603,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585846,SAMEA6061604,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585847,SAMEA6061605,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585848,SAMEA6061606,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585849,SAMEA6061607,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585850,SAMEA6061608,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585851,SAMEA6061609,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585852,SAMEA6061610,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585853,SAMEA6061611,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585854,SAMEA6061612,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585855,SAMEA6061613,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585856,SAMEA6061614,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585857,SAMEA6061615,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585858,SAMEA6061616,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585859,SAMEA6061617,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR3585860,SAMEA6061618,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094254,SAMEA8923063,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094255,SAMEA8923064,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094256,SAMEA8923065,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094257,SAMEA8923066,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094258,SAMEA8923067,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094259,SAMEA8923068,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094260,SAMEA8923069,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094261,SAMEA8923070,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094262,SAMEA8923071,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+ERR6094263,SAMEA8923072,,,,,,,,,Kyphosus sydneyanus,,,,,,,,,,,,,Sample
+SRR17060816,SAMN23482393,599,171.33 M,120.07 Mb,2017-12,hindgut section V,lumen content from sample G184V,SRX13249752,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G184V,2021-11-2902:10:00Z,G184V,,,,,,,,,,Sample
+SRR17060817,SAMN23482392,600,406.75 M,270.71 Mb,2017-12,hindgut section IV,lumen content from sample G184IV,SRX13249751,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G184IV,2021-11-2902:10:00Z,G184IV,,,,,,,,,,Sample
+SRR17060818,SAMN23482391,601,355.43 M,241.91 Mb,2017-12,hindgut section IV,lumen content from sample G179IV,SRX13249750,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G179IV,2021-11-2902:10:00Z,G179IV,,,,,,,,,,Sample
+SRR17060819,SAMN23482390,600,227.73 M,159.22 Mb,2017-12,hindgut section V,lumen content from sample G161V,SRX13249749,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G161V,2021-11-2902:10:00Z,G161V,,,,,,,,,,Sample
+SRR17060820,SAMN23482389,601,342.77 M,231.51 Mb,2017-12,hindgut section IV,lumen content from sample G161IV,SRX13249748,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G161IV,2021-11-2902:10:00Z,G161IV,,,,,,,,,,Sample
+SRR17060821,SAMN23482388,600,334.54 M,223.61 Mb,2017-12,hindgut section V,lumen content from sample G160V,SRX13249747,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G160V,2021-11-2902:10:00Z,G160V,,,,,,,,,,Sample
+SRR17060822,SAMN23482415,501,66.36 M,48.11 Mb,2011-03,hindgut section V,lumen content from sample M90V,SRX13249746,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M90V,2021-11-2902:09:00Z,M90V,,,,,,,,,,Sample
+SRR17060823,SAMN23482414,501,108.11 M,78.76 Mb,2011-03,hindgut section IV,lumen content from sample M90IV,SRX13249745,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M90IV,2021-11-2902:09:00Z,M90IV,,,,,,,,,,Sample
+SRR17060824,SAMN23482387,601,236.57 M,161.24 Mb,2017-12,hindgut section IV,lumen content from sample G160IV,SRX13249744,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G160IV,2021-11-2902:10:00Z,G160IV,,,,,,,,,,Sample
+SRR17060825,SAMN23482413,501,58.49 M,42.52 Mb,2011-03,hindgut section IV,lumen content from sample M241V,SRX13249743,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M241V,2021-11-2902:09:00Z,M241V,,,,,,,,,,Sample
+SRR17060826,SAMN23482412,501,54.78 M,40.04 Mb,2011-03,hindgut section IV,lumen content from sample M241IV,SRX13249742,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M241IV,2021-11-2902:09:00Z,M241IV,,,,,,,,,,Sample
+SRR17060827,SAMN23482411,501,50.78 M,37.27 Mb,2011-03,hindgut section V,lumen content from sample M106V,SRX13249741,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M106V,2021-11-2902:09:00Z,M106V,,,,,,,,,,Sample
+SRR17060828,SAMN23482410,501,62.82 M,45.66 Mb,2011-03,hindgut section V,lumen content from sample M104V,SRX13249740,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M104V,2021-11-2902:09:00Z,M104V,,,,,,,,,,Sample
+SRR17060829,SAMN23482409,501,2.11 M,1.61 Mb,2011-03,hindgut section IV,lumen content from sample M104IV,SRX13249739,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,M104IV,2021-11-2902:09:00Z,M104IV,,,,,,,,,,Sample
+SRR17060830,SAMN23482408,600,22.82 M,16.21 Mb,2017-12,hindgut section V,lumen content from sample G162V,SRX13249738,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G162V,2021-11-2902:10:00Z,G162V,,,,,,,,,,Sample
+SRR17060831,SAMN23482407,600,371.73 M,261.00 Mb,2017-12,hindgut section IV,lumen content from sample G162IV,SRX13249737,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G162IV,2021-11-2902:10:00Z,G162IV,,,,,,,,,,Sample
+SRR17060832,SAMN23482406,600,182.62 M,124.37 Mb,2017-12,hindgut section V,lumen content from sample G159V,SRX13249736,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G159V,2021-11-2902:10:00Z,G159V,,,,,,,,,,Sample
+SRR17060833,SAMN23482405,600,325.49 M,225.21 Mb,2017-12,hindgut section IV,lumen content from sample G159IV,SRX13249735,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G159IV,2021-11-2902:10:00Z,G159IV,,,,,,,,,,Sample
+SRR17060834,SAMN23482404,600,329.45 M,231.64 Mb,2017-12,hindgut section V,lumen content from sample G158V,SRX13249734,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G158V,2021-11-2902:10:00Z,G158V,,,,,,,,,,Sample
+SRR17060835,SAMN23482386,599,271.32 M,187.91 Mb,2017-12,hindgut section V,lumen content from sample G138V,SRX13249733,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G138V,2021-11-2902:10:00Z,G138V,,,,,,,,,,Sample
+SRR17060836,SAMN23482403,601,316.64 M,218.86 Mb,2017-12,hindgut section IV,lumen content from sample G158IV,SRX13249732,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G158IV,2021-11-2902:10:00Z,G158IV,,,,,,,,,,Sample
+SRR17060837,SAMN23482402,600,204.47 M,144.01 Mb,2017-12,hindgut section V,lumen content from sample G157V,SRX13249731,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G157V,2021-11-2902:10:00Z,G157V,,,,,,,,,,Sample
+SRR17060838,SAMN23482401,600,275.61 M,188.52 Mb,2017-12,hindgut section IV,lumen content from sample G157IV,SRX13249730,"Herbivorus, mainly green and brown seaweed",Kyphosus vaigiensis,G157IV,2021-11-2902:10:00Z,G157IV,,,,,,,,,,Sample
+SRR17060839,SAMN23482400,501,2.16 M,1.65 Mb,2011-03,hindgut section V,lumen content from sample M97V,SRX13249729,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M97V,2021-11-2902:09:00Z,M97V,,,,,,,,,,Sample
+SRR17060840,SAMN23482399,501,90.53 M,66.00 Mb,2011-03,hindgut section V,lumen content from sample M96V,SRX13249728,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M96V,2021-11-2902:09:00Z,M96V,,,,,,,,,,Sample
+SRR17060841,SAMN23482398,501,72.63 M,52.93 Mb,2011-03,hindgut section IV,lumen content from sample M96IV,SRX13249727,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M96IV,2021-11-2902:09:00Z,M96IV,,,,,,,,,,Sample
+SRR17060842,SAMN23482397,501,58.26 M,42.30 Mb,2011-03,hindgut section V,lumen content from sample M235V,SRX13249726,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M235V,2021-11-2902:09:00Z,M235V,,,,,,,,,,Sample
+SRR17060843,SAMN23482396,501,59.51 M,43.29 Mb,2011-03,hindgut section IV,lumen content from sample M235IV,SRX13249725,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M235IV,2021-11-2902:09:00Z,M235IV,,,,,,,,,,Sample
+SRR17060844,SAMN23482395,501,69.24 M,50.65 Mb,2011-03,hindgut section V,lumen content from sample M103V,SRX13249724,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M103V,2021-11-2902:09:00Z,M103V,,,,,,,,,,Sample
+SRR17060845,SAMN23482394,501,5.04 M,3.77 Mb,2011-03,hindgut section IV,lumen content from sample M103IV,SRX13249723,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M103IV,2021-11-2902:09:00Z,M103IV,,,,,,,,,,Sample
+SRR17060846,SAMN23482385,601,264.99 M,183.99 Mb,2017-12,hindgut section IV,lumen content from sample G138IV,SRX13249722,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G138IV,2021-11-2902:10:00Z,G138IV,,,,,,,,,,Sample
+=======
 ﻿Run,BioSample,AvgSpotLen,Bases,Bytes,Collection_Date,env_local_scale,env_medium,Experiment,Host_Diet,Host,Library Name,create_date,Sample Name,replicate,Region,Location,Time,SL (mm),FL (mm),TW (g),GW (g),Sex,Sample_or_Control
 568_4,S246,,,,12/12/14,hindgut section IV,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,South Island South,15:30,236,285,654.3,52.5,M,Sample
 568_5,S346,,,,12/12/14,hindgut section V,,,,Pomacanthus sexstriatus,,,,,Great Barrier Reef,Between Bird Islet and South Island,15:30,236,285,654.3,52.5,M,Sample
@@ -86,4 +175,5 @@ SRR17060843,SAMN23482396,501,59.51 M,43.29 Mb,2011-03,hindgut section IV,lumen c
 SRR17060844,SAMN23482395,501,69.24 M,50.65 Mb,2011-03,hindgut section V,lumen content from sample M103V,SRX13249724,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M103V,2021-11-2902:09:00Z,M103V,,,,,,,,,,Sample
 SRR17060845,SAMN23482394,501,5.04 M,3.77 Mb,2011-03,hindgut section IV,lumen content from sample M103IV,SRX13249723,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,M103IV,2021-11-2902:09:00Z,M103IV,,,,,,,,,,Sample
 SRR17060846,SAMN23482385,601,264.99 M,183.99 Mb,2017-12,hindgut section IV,lumen content from sample G138IV,SRX13249722,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G138IV,2021-11-2902:10:00Z,G138IV,,,,,,,,,,Sample
+>>>>>>> f1e13dd0adf4435cdf6b412d7be2b5dbb9ca9f75
 SRR17060847,SAMN23482384,601,207.83 M,145.38 Mb,2017-12,hindgut section IV,lumen content from sample G135IV,SRX13249721,"Herbivorus, mainly red seaweed",Kyphosus cinerascens,G135IV,2021-11-2902:10:00Z,G135IV,,,,,,,,,,Sample
