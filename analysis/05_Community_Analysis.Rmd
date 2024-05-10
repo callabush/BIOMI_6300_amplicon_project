@@ -786,7 +786,7 @@ Genus_colors <- c(
   Alistipes = "deeppink1",
   Aureibacter = "plum2", 
   Endozoicomonas = "gold", 
-   Desulfobotulus= "plum1", 
+   Desulfobotulus= "magenta4", 
   Fibrobacter = "red1",
   Desulfovibrio="black", 
   "dgA-11 gut group" = "firebrick",
@@ -822,7 +822,6 @@ Genus_df %>%
   ggplot(aes(x = names, y = Abundance, fill = Genus)) +
   facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
-  labs(title = "Gut Section Genus Composition") +
   scale_fill_manual(values = Genus_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
@@ -834,7 +833,6 @@ Genus_df %>%
   ggplot(aes(x = names, y = Abundance, fill = Genus)) +
   #facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
-  labs(title = "Gut Section Genus Composition") +
   scale_fill_manual(values = Genus_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
