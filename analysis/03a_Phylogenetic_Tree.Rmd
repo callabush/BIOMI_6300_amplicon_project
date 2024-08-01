@@ -79,10 +79,6 @@ write(asv_seq_fasta, file = "data/03_Phylogenetic_Tree/preprocessed_ASVs.fasta")
 
 
 ```{r run-mafft, engine='bash', engine.opts = '-l'}
-# Write bash code to run mafft from BioHPC
-# First provide the path to run MAFFT
-export PATH=/programs/mafft/bin:$PATH 
-
 # Change directories to provide the fasta file we made above
 cd data/03_Phylogenetic_Tree/
 pwd
@@ -96,7 +92,7 @@ RANDOM=238428
 # to test in the shell directly from computer
 # mac: 
 
-/programs/mafft/bin/mafft --auto preprocessed_ASVs.fasta > MAFFT_aligned_ASVs.fasta
+mafft  preprocessed_ASVs.fasta > MAFFT_aligned_ASVs.fasta
 
 # Change back to project directory
 cd ../../
@@ -106,10 +102,6 @@ pwd
 # FastTree2
 
 ```{r run-FastTree2, engine='bash', engine.opts = '-l'}
-# Instructions from Cornell BioHPC
-# Add program to your path
-export PATH=/programs/FastTree-2.1.11:$PATH
-
 # cd into the alignment file folder
 cd data/03_Phylogenetic_Tree/
 pwd
@@ -124,8 +116,7 @@ pwd
   # specify the output tree file
   
   
-  FastTree -nt -gtr -fastest -log FastTree.log MAFFT_aligned_ASVs.fasta > ASVs_unrooted.tree
-  
+  /Users/cab565/Applications/FastTree -nt -gtr -fastest -log FastTree.log MAFFT_aligned_ASVs.fasta > ASVs_unrooted.tree  
   # Change back to main directory
   cd ../../
   pwd

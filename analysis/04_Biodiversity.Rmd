@@ -89,7 +89,7 @@ dim(iNEXT_input_df)
 # Note that: Species in ROWS, Samples in COLUMNS 
 # Remember to set the seed! 
 #iNEXT_data <- iNEXT(iNEXT_input_df, 
- #                   q = c(0,1,2), datatype = "abundance")
+#                   q = c(0,1,2), datatype = "abundance")
 
 # Save the file
 #save(iNEXT_data, file = "data/04_Biodiversity/iNEXT_data.RData")
@@ -207,8 +207,7 @@ iNEXT_manual_df %>%
   stat_smooth() + 
   labs(x = "Gut section", y = "# of ASVs") + 
   scale_color_manual(values = gutsection_colors) + 
-  theme(legend.position = "bottom") +  
-  stat_compare_means()
+  theme(legend.position = "bottom")
 
 ```
 

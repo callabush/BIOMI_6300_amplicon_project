@@ -150,7 +150,6 @@ save(raw_physeq, file = "data/02_PreProcessing/raw_physeq.RData")
 ```
 
 # Clean up the data
-
 Remove: 
 
 1. Chloroplasts

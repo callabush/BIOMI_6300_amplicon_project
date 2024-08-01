@@ -581,6 +581,9 @@ save(track_counts_df, file = "data/01_DADA2/track_read_counts.RData")
 ```
 
 
+```{r asv-tab}
+write.csv2(asv_tab, file = "data/01_DADA2/ASV_counts.csv")
+```
 
 
 

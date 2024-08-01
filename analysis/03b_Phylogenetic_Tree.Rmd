@@ -138,7 +138,7 @@ ggtree(midroot_physeq) +
 # Save both phyloseq objects with our tree object to one .RData file
 save(list = c("unrooted_physeq", "midroot_physeq"),
      file = "data/03_Phylogenetic_Tree/phytree_preprocessed_physeq.RData")
-s```
+```
 
 
 
