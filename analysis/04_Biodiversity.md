@@ -1,7 +1,7 @@
 ---
 title: "BioDiversity"
 author: "Calla Bush St George"
-date: "2024-07-30"
+date: "2025-08-26"
 output:
   html_document: 
     code_folding: show
@@ -19,7 +19,7 @@ editor_options:
 ---
 
 
-```r
+``` r
 knitr::opts_chunk$set(echo = TRUE,
                       fig.align = "center",
                       fig.path = "../figures/04_Biodiversity/",
@@ -32,21 +32,22 @@ knitr::opts_chunk$set(echo = TRUE,
 
 ### Set my seed
 
-```r
+``` r
 # Any number can be chose
 set.seed(567890)
 ```
 
 ## Load Libraries 
 
-```r
-pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,rstatix, ggpubr,
+``` r
+pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq, rstatix, 
+               ggpubr,
                install = FALSE)
 ```
 
 ## Load in Data 
 
-```r
+``` r
 load("data/02_PreProcessing/raw_preprocessed_physeq.RData")
 raw_preprocessed_physeq
 ```
@@ -58,7 +59,7 @@ raw_preprocessed_physeq
 ## tax_table()   Taxonomy Table:    [ 1736 taxa by 9 taxonomic ranks ]
 ```
 
-```r
+``` r
 # Intuition Check 
 min(sample_sums(raw_preprocessed_physeq))
 ```
@@ -67,7 +68,7 @@ min(sample_sums(raw_preprocessed_physeq))
 ## [1] 7142
 ```
 
-```r
+``` r
 # Setting colors for gut sections 
 gutsection_colors <- c(
   "IV" = "dodgerblue4",
@@ -92,7 +93,7 @@ metadata_df <-
 # Diversity Calculations with iNEXT 
 
 
-```r
+``` r
 # prepare input data 
 iNEXT_input_df <- 
   raw_preprocessed_physeq %>%
@@ -106,7 +107,7 @@ dim(iNEXT_input_df)
 ## [1] 1736   11
 ```
 
-```r
+``` r
 # Run iNEXT: Calculate the Hill Numbers 
 # Note that: Species in ROWS, Samples in COLUMNS 
 # Remember to set the seed! 
@@ -119,7 +120,7 @@ dim(iNEXT_input_df)
 
 # Evaluate the Diversity! 
 
-```r
+``` r
 load("data/04_Biodiversity/iNEXT_data.RData")
 str(iNEXT_data)
 ```
@@ -173,7 +174,7 @@ str(iNEXT_data)
 ##  - attr(*, "class")= chr "iNEXT"
 ```
 
-```r
+``` r
 typeof(iNEXT_data)
 ```
 
@@ -183,7 +184,7 @@ typeof(iNEXT_data)
 
 # Plot Diversity 
 
-```r
+``` r
 # Prepare Colors 
 color_df <- 
   iNEXT_input_df %>%
@@ -203,7 +204,7 @@ head(color_df)
 ## 6   E1_4
 ```
 
-```r
+``` r
 # Rename the column 
 colnames(color_df)[1] <- "names"
 # Check
@@ -220,7 +221,7 @@ head(color_df)
 ## 6   E1_4
 ```
 
-```r
+``` r
 # Make a helper dataframe for plotting with colors 
 iNEXT_color_df <- 
   color_df %>%
@@ -238,7 +239,7 @@ iNEXT_color_df <-
 # Plot Rarefaction with `ggiNEXT`
 
 
-```r
+``` r
 # Plot rarefaction! 
 # rarefaction/extrapolation curve, type = 1 
 
@@ -272,7 +273,7 @@ My rarefaction curves and extrapolation looks like I would expect. Species diver
 
 ## Rarefaction
 
-```r
+``` r
 iNEXT_manual_df <- 
   iNEXT_data$iNextEst$size_based %>%
   dplyr::rename(names = Assemblage) %>%
@@ -294,7 +295,7 @@ dim(iNEXT_manual_df)
 ## [1] 1320   33
 ```
 
-```r
+``` r
 str(iNEXT_manual_df)
 ```
 
@@ -335,7 +336,7 @@ str(iNEXT_manual_df)
 ##  $ gutsection_colors  : chr  "dodgerblue4" "dodgerblue4" "dodgerblue4" "dodgerblue4" ...
 ```
 
-```r
+``` r
 # Plot it - Rarefaction Curve 
 iNEXT_manual_df %>%
   # Filter out rows that are calcaulted by rarefaction from iNEXT
@@ -359,16 +360,249 @@ iNEXT_manual_df %>%
 # Diversity vs Gut Section 
 
 
-```r
+``` r
+#### 
+# Stats
+obs_div_df <- 
+  iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed") 
+# check it
+glimpse(obs_div_df)
+```
+
+```
+## Rows: 33
+## Columns: 33
+## $ names               <chr> "568_4", "568_4", "568_4", "568_5", "568_5", "568_…
+## $ m                   <dbl> 24503, 24503, 24503, 17303, 17303, 17303, 15963, 1…
+## $ Method              <chr> "Observed", "Observed", "Observed", "Observed", "O…
+## $ Order.q             <dbl> 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1,…
+## $ qD                  <dbl> 47.000000, 5.044894, 3.285552, 434.000000, 152.518…
+## $ qD.LCL              <dbl> 45.425542, 4.953346, 3.234355, 431.132546, 148.439…
+## $ qD.UCL              <dbl> 48.574458, 5.136443, 3.336748, 436.867454, 156.597…
+## $ SC                  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ SC.LCL              <dbl> 0.9999120, 0.9999120, 0.9999120, 0.9997024, 0.9997…
+## $ SC.UCL              <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ host_species        <chr> "Pomacanthus sexstriatus", "Pomacanthus sexstriatu…
+## $ gut_section         <chr> "IV", "IV", "IV", "V", "V", "V", "V", "V", "V", "V…
+## $ region              <chr> "Great Barrier Reef", "Great Barrier Reef", "Great…
+## $ location            <chr> "South Island South", "South Island South", "South…
+## $ year                <int> 2014, 2014, 2014, 2014, 2014, 2014, 2014, 2014, 20…
+## $ month               <int> 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 3,…
+## $ day                 <int> 12, 12, 12, 12, 12, 12, 14, 14, 14, 18, 18, 18, 22…
+## $ sample_lab          <chr> "S246", "S246", "S246", "S346", "S346", "S346", "S…
+## $ Time                <chr> "15:30", "15:30", "15:30", "15:30", "15:30", "15:3…
+## $ SL..mm.             <int> 236, 236, 236, 236, 236, 236, 190, 190, 190, 210, …
+## $ FL..mm.             <int> 285, 285, 285, 285, 285, 285, 235, 235, 235, 256, …
+## $ TW..g.              <dbl> 654.3, 654.3, 654.3, 654.3, 654.3, 654.3, 381.1, 3…
+## $ GW..g.              <dbl> 52.5, 52.5, 52.5, 52.5, 52.5, 52.5, 308.6, 308.6, …
+## $ Sex                 <chr> "M", "M", "M", "M", "M", "M", "F", "F", "F", "M", …
+## $ Sample_or_Control   <chr> "Sample", "Sample", "Sample", "Sample", "Sample", …
+## $ input               <dbl> 52502, 52502, 52502, 38610, 38610, 38610, 35144, 3…
+## $ filtered            <dbl> 25983, 25983, 25983, 18739, 18739, 18739, 17699, 1…
+## $ denoisedF           <dbl> 25713, 25713, 25713, 18165, 18165, 18165, 17222, 1…
+## $ denoisedR           <dbl> 25724, 25724, 25724, 18254, 18254, 18254, 17193, 1…
+## $ merged              <dbl> 24787, 24787, 24787, 17389, 17389, 17389, 16071, 1…
+## $ nochim              <dbl> 24522, 24522, 24522, 17305, 17305, 17305, 15963, 1…
+## $ perc_reads_retained <dbl> 46.70679, 46.70679, 46.70679, 44.81999, 44.81999, …
+## $ gutsection_colors   <chr> "dodgerblue4", "dodgerblue4", "dodgerblue4", "#FF5…
+```
+
+``` r
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 0)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  obs_whole_rich_df$qD
+## W = 0.89554, p-value = 0.1629
+```
+
+``` r
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+```
+
+```
+## # A tibble: 1 × 7
+##   .y.   group1 group2    n1    n2 statistic      p
+## * <chr> <chr>  <chr>  <int> <int>     <dbl>  <dbl>
+## 1 qD    IV     V          4     7         1 0.0121
+```
+
+``` r
+summary(wx_station_salinity)
+```
+
+```
+##      .y.               group1             group2                n1   
+##  Length:1           Length:1           Length:1           Min.   :4  
+##  Class :character   Class :character   Class :character   1st Qu.:4  
+##  Mode  :character   Mode  :character   Mode  :character   Median :4  
+##                                                           Mean   :4  
+##                                                           3rd Qu.:4  
+##                                                           Max.   :4  
+##        n2      statistic       p         
+##  Min.   :7   Min.   :1   Min.   :0.0121  
+##  1st Qu.:7   1st Qu.:1   1st Qu.:0.0121  
+##  Median :7   Median :1   Median :0.0121  
+##  Mean   :7   Mean   :1   Mean   :0.0121  
+##  3rd Qu.:7   3rd Qu.:1   3rd Qu.:0.0121  
+##  Max.   :7   Max.   :1   Max.   :0.0121
+```
+
+``` r
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 1)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  obs_whole_rich_df$qD
+## W = 0.86171, p-value = 0.06059
+```
+
+``` r
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+```
+
+```
+## # A tibble: 1 × 7
+##   .y.   group1 group2    n1    n2 statistic       p
+## * <chr> <chr>  <chr>  <int> <int>     <dbl>   <dbl>
+## 1 qD    IV     V          4     7         0 0.00606
+```
+
+``` r
+summary(wx_station_salinity)
+```
+
+```
+##      .y.               group1             group2                n1   
+##  Length:1           Length:1           Length:1           Min.   :4  
+##  Class :character   Class :character   Class :character   1st Qu.:4  
+##  Mode  :character   Mode  :character   Mode  :character   Median :4  
+##                                                           Mean   :4  
+##                                                           3rd Qu.:4  
+##                                                           Max.   :4  
+##        n2      statistic       p          
+##  Min.   :7   Min.   :0   Min.   :0.00606  
+##  1st Qu.:7   1st Qu.:0   1st Qu.:0.00606  
+##  Median :7   Median :0   Median :0.00606  
+##  Mean   :7   Mean   :0   Mean   :0.00606  
+##  3rd Qu.:7   3rd Qu.:0   3rd Qu.:0.00606  
+##  Max.   :7   Max.   :0   Max.   :0.00606
+```
+
+``` r
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 2)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  obs_whole_rich_df$qD
+## W = 0.91519, p-value = 0.2806
+```
+
+``` r
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+```
+
+```
+## # A tibble: 1 × 7
+##   .y.   group1 group2    n1    n2 statistic       p
+## * <chr> <chr>  <chr>  <int> <int>     <dbl>   <dbl>
+## 1 qD    IV     V          4     7         0 0.00606
+```
+
+``` r
+summary(wx_station_salinity)
+```
+
+```
+##      .y.               group1             group2                n1   
+##  Length:1           Length:1           Length:1           Min.   :4  
+##  Class :character   Class :character   Class :character   1st Qu.:4  
+##  Mode  :character   Mode  :character   Mode  :character   Median :4  
+##                                                           Mean   :4  
+##                                                           3rd Qu.:4  
+##                                                           Max.   :4  
+##        n2      statistic       p          
+##  Min.   :7   Min.   :0   Min.   :0.00606  
+##  1st Qu.:7   1st Qu.:0   1st Qu.:0.00606  
+##  Median :7   Median :0   Median :0.00606  
+##  Mean   :7   Mean   :0   Mean   :0.00606  
+##  3rd Qu.:7   3rd Qu.:0   3rd Qu.:0.00606  
+##  Max.   :7   Max.   :0   Max.   :0.00606
+```
+
+``` r
+#######
+# Plotting
+
+ indexes <- c("Richness", "Shannon Index", "Reverse Simpson Index")
+names(indexes) <- c("0", "1", "2")
+
 iNEXT_manual_df %>%
   dplyr::filter(Method == "Observed") %>%
   ggplot(aes(x = gut_section, y = qD)) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
-  facet_wrap(.~Order.q, scales = "free") + 
-  geom_point(aes(color = gut_section)) + 
+  facet_wrap(.~Order.q, scales = "free",  
+             labeller = labeller(Order.q = indexes)) + 
   stat_smooth() + 
-  labs(x = "Gut section", y = "# of ASVs") + 
-  scale_color_manual(values = gutsection_colors) + 
+  labs(x = "Section", y = "Alpha Diversity Measure") + 
   theme(legend.position = "bottom")
 ```
 
@@ -382,7 +616,7 @@ This plot compares the relative number of ASVs to gut section (IV or V). Consist
 
 # Session Information 
 
-```r
+``` r
 # Ensure reproducibility 
 devtools::session_info()
 ```
@@ -390,138 +624,139 @@ devtools::session_info()
 ```
 ## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value
-##  version  R version 4.3.2 (2023-10-31)
-##  os       macOS Sonoma 14.5
+##  version  R version 4.4.2 (2024-10-31)
+##  os       macOS Sequoia 15.6.1
 ##  system   x86_64, darwin20
 ##  ui       X11
 ##  language (EN)
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-07-30
-##  pandoc   3.1.11 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/x86_64/ (via rmarkdown)
+##  date     2025-08-26
+##  pandoc   3.4 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/x86_64/ (via rmarkdown)
+##  quarto   1.6.42 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package          * version    date (UTC) lib source
-##  abind              1.4-5      2016-07-21 [2] CRAN (R 4.3.0)
-##  ade4               1.7-22     2023-02-06 [2] CRAN (R 4.3.0)
-##  ape                5.7-1      2023-03-13 [2] CRAN (R 4.3.0)
-##  backports          1.4.1      2021-12-13 [2] CRAN (R 4.3.0)
-##  Biobase            2.62.0     2023-10-24 [2] Bioconductor
-##  BiocGenerics       0.48.1     2023-11-01 [2] Bioconductor
-##  biomformat         1.30.0     2023-10-24 [2] Bioconductor
-##  Biostrings         2.70.2     2024-01-28 [2] Bioconductor 3.18 (R 4.3.2)
-##  bitops             1.0-7      2021-04-24 [2] CRAN (R 4.3.0)
-##  broom              1.0.5      2023-06-09 [2] CRAN (R 4.3.0)
-##  bslib              0.6.1      2023-11-28 [2] CRAN (R 4.3.0)
-##  cachem             1.0.8      2023-05-01 [2] CRAN (R 4.3.0)
-##  car                3.1-2      2023-03-30 [1] CRAN (R 4.3.0)
-##  carData            3.0-5      2022-01-06 [1] CRAN (R 4.3.0)
-##  cli                3.6.2      2023-12-11 [2] CRAN (R 4.3.0)
-##  cluster            2.1.6      2023-12-01 [2] CRAN (R 4.3.0)
-##  codetools          0.2-19     2023-02-01 [2] CRAN (R 4.3.2)
-##  colorspace         2.1-0      2023-01-23 [2] CRAN (R 4.3.0)
-##  crayon             1.5.2      2022-09-29 [2] CRAN (R 4.3.0)
-##  data.table         1.15.0     2024-01-30 [2] CRAN (R 4.3.2)
-##  devtools         * 2.4.5      2022-10-11 [2] CRAN (R 4.3.0)
-##  digest             0.6.34     2024-01-11 [2] CRAN (R 4.3.0)
-##  dplyr            * 1.1.4      2023-11-17 [2] CRAN (R 4.3.0)
-##  ellipsis           0.3.2      2021-04-29 [2] CRAN (R 4.3.0)
-##  evaluate           0.23       2023-11-01 [2] CRAN (R 4.3.0)
-##  fansi              1.0.6      2023-12-08 [2] CRAN (R 4.3.0)
-##  farver             2.1.1      2022-07-06 [2] CRAN (R 4.3.0)
-##  fastmap            1.1.1      2023-02-24 [2] CRAN (R 4.3.0)
-##  forcats          * 1.0.0      2023-01-29 [2] CRAN (R 4.3.0)
-##  foreach            1.5.2      2022-02-02 [2] CRAN (R 4.3.0)
-##  fs                 1.6.3      2023-07-20 [2] CRAN (R 4.3.0)
-##  generics           0.1.3      2022-07-05 [2] CRAN (R 4.3.0)
-##  GenomeInfoDb       1.38.6     2024-02-08 [2] Bioconductor 3.18 (R 4.3.2)
-##  GenomeInfoDbData   1.2.11     2023-11-13 [2] Bioconductor
-##  ggplot2          * 3.4.4      2023-10-12 [1] CRAN (R 4.3.0)
-##  ggpubr           * 0.6.0.999  2024-07-30 [1] Github (kassambara/ggpubr@6aeb4f7)
-##  ggsignif           0.6.4      2022-10-13 [1] CRAN (R 4.3.0)
-##  glue               1.7.0      2024-01-09 [1] CRAN (R 4.3.0)
-##  gtable             0.3.4      2023-08-21 [2] CRAN (R 4.3.0)
-##  highr              0.10       2022-12-22 [2] CRAN (R 4.3.0)
-##  hms                1.1.3      2023-03-21 [2] CRAN (R 4.3.0)
-##  htmltools          0.5.7      2023-11-03 [2] CRAN (R 4.3.0)
-##  htmlwidgets        1.6.4      2023-12-06 [2] CRAN (R 4.3.0)
-##  httpuv             1.6.14     2024-01-26 [2] CRAN (R 4.3.2)
-##  igraph             2.0.1.1    2024-01-30 [2] CRAN (R 4.3.2)
-##  iNEXT            * 3.0.0      2022-08-29 [2] CRAN (R 4.3.0)
-##  IRanges            2.36.0     2023-10-24 [2] Bioconductor
-##  iterators          1.0.14     2022-02-05 [2] CRAN (R 4.3.0)
-##  jquerylib          0.1.4      2021-04-26 [2] CRAN (R 4.3.0)
-##  jsonlite           1.8.8      2023-12-04 [2] CRAN (R 4.3.0)
-##  knitr              1.45       2023-10-30 [2] CRAN (R 4.3.0)
-##  labeling           0.4.3      2023-08-29 [2] CRAN (R 4.3.0)
-##  later              1.3.2      2023-12-06 [2] CRAN (R 4.3.0)
-##  lattice            0.22-5     2023-10-24 [2] CRAN (R 4.3.0)
-##  lifecycle          1.0.4      2023-11-07 [2] CRAN (R 4.3.0)
-##  lubridate        * 1.9.3      2023-09-27 [2] CRAN (R 4.3.0)
-##  magrittr           2.0.3      2022-03-30 [2] CRAN (R 4.3.0)
-##  MASS               7.3-60.0.1 2024-01-13 [2] CRAN (R 4.3.0)
-##  Matrix             1.6-5      2024-01-11 [2] CRAN (R 4.3.0)
-##  memoise            2.0.1      2021-11-26 [2] CRAN (R 4.3.0)
-##  mgcv               1.9-1      2023-12-21 [2] CRAN (R 4.3.0)
-##  mime               0.12       2021-09-28 [2] CRAN (R 4.3.0)
-##  miniUI             0.1.1.1    2018-05-18 [2] CRAN (R 4.3.0)
-##  multtest           2.58.0     2023-10-24 [2] Bioconductor
-##  munsell            0.5.0      2018-06-12 [2] CRAN (R 4.3.0)
-##  nlme               3.1-164    2023-11-27 [2] CRAN (R 4.3.0)
-##  pacman             0.5.1      2019-03-11 [1] CRAN (R 4.3.0)
-##  patchwork        * 1.2.0.9000 2024-05-07 [1] Github (thomasp85/patchwork@d943757)
-##  permute            0.9-7      2022-01-27 [2] CRAN (R 4.3.0)
-##  phyloseq         * 1.46.0     2023-10-24 [2] Bioconductor
-##  pillar             1.9.0      2023-03-22 [2] CRAN (R 4.3.0)
-##  pkgbuild           1.4.3      2023-12-10 [2] CRAN (R 4.3.0)
-##  pkgconfig          2.0.3      2019-09-22 [2] CRAN (R 4.3.0)
-##  pkgload            1.3.4      2024-01-16 [2] CRAN (R 4.3.0)
-##  plyr               1.8.9      2023-10-02 [1] CRAN (R 4.3.0)
-##  profvis            0.3.8      2023-05-02 [2] CRAN (R 4.3.0)
-##  promises           1.2.1      2023-08-10 [2] CRAN (R 4.3.0)
-##  purrr            * 1.0.2      2023-08-10 [2] CRAN (R 4.3.0)
-##  R6                 2.5.1      2021-08-19 [2] CRAN (R 4.3.0)
-##  Rcpp               1.0.12     2024-01-09 [2] CRAN (R 4.3.0)
-##  RCurl              1.98-1.14  2024-01-09 [2] CRAN (R 4.3.0)
-##  readr            * 2.1.5      2024-01-10 [2] CRAN (R 4.3.0)
-##  remotes            2.4.2.1    2023-07-18 [2] CRAN (R 4.3.0)
-##  reshape2           1.4.4      2020-04-09 [2] CRAN (R 4.3.0)
-##  rhdf5              2.46.1     2023-11-29 [2] Bioconductor
-##  rhdf5filters       1.14.1     2023-11-06 [2] Bioconductor
-##  Rhdf5lib           1.24.2     2024-02-07 [2] Bioconductor 3.18 (R 4.3.2)
-##  rlang              1.1.3      2024-01-10 [2] CRAN (R 4.3.0)
-##  rmarkdown          2.25       2023-09-18 [2] CRAN (R 4.3.0)
-##  rstatix          * 0.7.2      2023-02-01 [1] CRAN (R 4.3.0)
-##  rstudioapi         0.15.0     2023-07-07 [2] CRAN (R 4.3.0)
-##  S4Vectors          0.40.2     2023-11-23 [2] Bioconductor
-##  sass               0.4.8      2023-12-06 [2] CRAN (R 4.3.0)
-##  scales             1.3.0      2023-11-28 [2] CRAN (R 4.3.0)
-##  sessioninfo        1.2.2      2021-12-06 [2] CRAN (R 4.3.0)
-##  shiny              1.8.0      2023-11-17 [2] CRAN (R 4.3.0)
-##  stringi            1.8.3      2023-12-11 [2] CRAN (R 4.3.0)
-##  stringr          * 1.5.1      2023-11-14 [2] CRAN (R 4.3.0)
-##  survival           3.5-7      2023-08-14 [2] CRAN (R 4.3.0)
-##  tibble           * 3.2.1      2023-03-20 [2] CRAN (R 4.3.0)
-##  tidyr            * 1.3.1      2024-01-24 [1] CRAN (R 4.3.2)
-##  tidyselect         1.2.0      2022-10-10 [2] CRAN (R 4.3.0)
-##  tidyverse        * 2.0.0      2023-02-22 [1] CRAN (R 4.3.0)
-##  timechange         0.3.0      2024-01-18 [2] CRAN (R 4.3.0)
-##  tzdb               0.4.0      2023-05-12 [2] CRAN (R 4.3.0)
-##  urlchecker         1.0.1      2021-11-30 [2] CRAN (R 4.3.0)
-##  usethis          * 2.2.2      2023-07-06 [2] CRAN (R 4.3.0)
-##  utf8               1.2.4      2023-10-22 [2] CRAN (R 4.3.0)
-##  vctrs              0.6.5      2023-12-01 [2] CRAN (R 4.3.0)
-##  vegan              2.6-4      2022-10-11 [1] CRAN (R 4.3.0)
-##  withr              3.0.0      2024-01-16 [2] CRAN (R 4.3.0)
-##  xfun               0.42       2024-02-08 [2] CRAN (R 4.3.2)
-##  xtable             1.8-4      2019-04-21 [2] CRAN (R 4.3.0)
-##  XVector            0.42.0     2023-10-24 [2] Bioconductor
-##  yaml               2.3.8      2023-12-11 [2] CRAN (R 4.3.0)
-##  zlibbioc           1.48.0     2023-10-24 [2] Bioconductor
+##  package          * version date (UTC) lib source
+##  abind              1.4-8   2024-09-12 [1] CRAN (R 4.4.1)
+##  ade4               1.7-23  2025-02-14 [1] CRAN (R 4.4.1)
+##  ape                5.8-1   2024-12-16 [1] CRAN (R 4.4.1)
+##  backports          1.5.0   2024-05-23 [1] CRAN (R 4.4.0)
+##  Biobase            2.66.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  BiocGenerics       0.52.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  biomformat         1.34.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  Biostrings         2.74.1  2024-12-16 [1] Bioconductor 3.20 (R 4.4.2)
+##  broom              1.0.9   2025-07-28 [1] CRAN (R 4.4.1)
+##  bslib              0.9.0   2025-01-30 [1] CRAN (R 4.4.1)
+##  cachem             1.1.0   2024-05-16 [1] CRAN (R 4.4.0)
+##  car                3.1-3   2024-09-27 [1] CRAN (R 4.4.1)
+##  carData            3.0-5   2022-01-06 [1] CRAN (R 4.4.0)
+##  cli                3.6.5   2025-04-23 [1] CRAN (R 4.4.1)
+##  cluster            2.1.6   2023-12-01 [2] CRAN (R 4.4.2)
+##  codetools          0.2-20  2024-03-31 [2] CRAN (R 4.4.2)
+##  colorspace         2.1-1   2024-07-26 [1] CRAN (R 4.4.0)
+##  crayon             1.5.3   2024-06-20 [1] CRAN (R 4.4.0)
+##  data.table         1.17.8  2025-07-10 [1] CRAN (R 4.4.1)
+##  devtools         * 2.4.5   2022-10-11 [1] CRAN (R 4.4.0)
+##  digest             0.6.37  2024-08-19 [1] CRAN (R 4.4.1)
+##  dplyr            * 1.1.4   2023-11-17 [1] CRAN (R 4.4.0)
+##  ellipsis           0.3.2   2021-04-29 [1] CRAN (R 4.4.0)
+##  evaluate           1.0.4   2025-06-18 [1] CRAN (R 4.4.1)
+##  farver             2.1.2   2024-05-13 [1] CRAN (R 4.4.0)
+##  fastmap            1.2.0   2024-05-15 [1] CRAN (R 4.4.0)
+##  forcats          * 1.0.0   2023-01-29 [1] CRAN (R 4.4.0)
+##  foreach            1.5.2   2022-02-02 [1] CRAN (R 4.4.0)
+##  Formula            1.2-5   2023-02-24 [1] CRAN (R 4.4.0)
+##  fs                 1.6.6   2025-04-12 [1] CRAN (R 4.4.1)
+##  generics           0.1.4   2025-05-09 [1] CRAN (R 4.4.1)
+##  GenomeInfoDb       1.42.3  2025-01-27 [1] Bioconductor 3.20 (R 4.4.2)
+##  GenomeInfoDbData   1.2.13  2025-08-12 [1] Bioconductor
+##  ggplot2          * 3.5.2   2025-04-09 [1] CRAN (R 4.4.1)
+##  ggpubr           * 0.6.1   2025-06-27 [1] CRAN (R 4.4.1)
+##  ggsignif           0.6.4   2022-10-13 [1] CRAN (R 4.4.0)
+##  glue               1.8.0   2024-09-30 [1] CRAN (R 4.4.1)
+##  gtable             0.3.6   2024-10-25 [1] CRAN (R 4.4.1)
+##  hms                1.1.3   2023-03-21 [1] CRAN (R 4.4.0)
+##  htmltools          0.5.8.1 2024-04-04 [1] CRAN (R 4.4.0)
+##  htmlwidgets        1.6.4   2023-12-06 [1] CRAN (R 4.4.0)
+##  httpuv             1.6.16  2025-04-16 [1] CRAN (R 4.4.1)
+##  httr               1.4.7   2023-08-15 [1] CRAN (R 4.4.0)
+##  igraph             2.1.4   2025-01-23 [1] CRAN (R 4.4.1)
+##  iNEXT            * 3.0.2   2025-07-30 [1] CRAN (R 4.4.1)
+##  IRanges            2.40.1  2024-12-05 [1] Bioconductor 3.20 (R 4.4.2)
+##  iterators          1.0.14  2022-02-05 [1] CRAN (R 4.4.0)
+##  jquerylib          0.1.4   2021-04-26 [1] CRAN (R 4.4.0)
+##  jsonlite           2.0.0   2025-03-27 [1] CRAN (R 4.4.1)
+##  knitr              1.50    2025-03-16 [1] CRAN (R 4.4.1)
+##  labeling           0.4.3   2023-08-29 [1] CRAN (R 4.4.0)
+##  later              1.4.2   2025-04-08 [1] CRAN (R 4.4.1)
+##  lattice            0.22-6  2024-03-20 [2] CRAN (R 4.4.2)
+##  lifecycle          1.0.4   2023-11-07 [1] CRAN (R 4.4.0)
+##  lubridate        * 1.9.4   2024-12-08 [1] CRAN (R 4.4.1)
+##  magrittr           2.0.3   2022-03-30 [1] CRAN (R 4.4.0)
+##  MASS               7.3-61  2024-06-13 [2] CRAN (R 4.4.2)
+##  Matrix             1.7-1   2024-10-18 [2] CRAN (R 4.4.2)
+##  memoise            2.0.1   2021-11-26 [1] CRAN (R 4.4.0)
+##  mgcv               1.9-1   2023-12-21 [2] CRAN (R 4.4.2)
+##  mime               0.13    2025-03-17 [1] CRAN (R 4.4.1)
+##  miniUI             0.1.2   2025-04-17 [1] CRAN (R 4.4.1)
+##  multtest           2.62.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  nlme               3.1-166 2024-08-14 [2] CRAN (R 4.4.2)
+##  pacman             0.5.1   2019-03-11 [1] CRAN (R 4.4.0)
+##  patchwork        * 1.3.1   2025-06-21 [1] CRAN (R 4.4.1)
+##  permute            0.9-8   2025-06-25 [1] CRAN (R 4.4.1)
+##  phyloseq         * 1.50.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  pillar             1.11.0  2025-07-04 [1] CRAN (R 4.4.1)
+##  pkgbuild           1.4.8   2025-05-26 [1] CRAN (R 4.4.1)
+##  pkgconfig          2.0.3   2019-09-22 [1] CRAN (R 4.4.0)
+##  pkgload            1.4.0   2024-06-28 [1] CRAN (R 4.4.0)
+##  plyr               1.8.9   2023-10-02 [1] CRAN (R 4.4.0)
+##  profvis            0.4.0   2024-09-20 [1] CRAN (R 4.4.1)
+##  promises           1.3.3   2025-05-29 [1] CRAN (R 4.4.1)
+##  purrr            * 1.1.0   2025-07-10 [1] CRAN (R 4.4.1)
+##  R6                 2.6.1   2025-02-15 [1] CRAN (R 4.4.1)
+##  RColorBrewer       1.1-3   2022-04-03 [1] CRAN (R 4.4.0)
+##  Rcpp               1.1.0   2025-07-02 [1] CRAN (R 4.4.1)
+##  readr            * 2.1.5   2024-01-10 [1] CRAN (R 4.4.0)
+##  remotes            2.5.0   2024-03-17 [1] CRAN (R 4.4.0)
+##  reshape2           1.4.4   2020-04-09 [1] CRAN (R 4.4.0)
+##  rhdf5              2.50.2  2025-01-09 [1] Bioconductor 3.20 (R 4.4.2)
+##  rhdf5filters       1.18.1  2025-03-06 [1] Bioconductor 3.20 (R 4.4.3)
+##  Rhdf5lib           1.28.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  rlang              1.1.6   2025-04-11 [1] CRAN (R 4.4.1)
+##  rmarkdown          2.29    2024-11-04 [1] CRAN (R 4.4.1)
+##  rstatix          * 0.7.2   2023-02-01 [1] CRAN (R 4.4.0)
+##  rstudioapi         0.17.1  2024-10-22 [1] CRAN (R 4.4.1)
+##  S4Vectors          0.44.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  sass               0.4.10  2025-04-11 [1] CRAN (R 4.4.1)
+##  scales             1.4.0   2025-04-24 [1] CRAN (R 4.4.1)
+##  sessioninfo        1.2.3   2025-02-05 [1] CRAN (R 4.4.1)
+##  shiny              1.11.1  2025-07-03 [1] CRAN (R 4.4.1)
+##  stringi            1.8.7   2025-03-27 [1] CRAN (R 4.4.1)
+##  stringr          * 1.5.1   2023-11-14 [1] CRAN (R 4.4.0)
+##  survival           3.7-0   2024-06-05 [2] CRAN (R 4.4.2)
+##  tibble           * 3.3.0   2025-06-08 [1] CRAN (R 4.4.1)
+##  tidyr            * 1.3.1   2024-01-24 [1] CRAN (R 4.4.0)
+##  tidyselect         1.2.1   2024-03-11 [1] CRAN (R 4.4.0)
+##  tidyverse        * 2.0.0   2023-02-22 [1] CRAN (R 4.4.0)
+##  timechange         0.3.0   2024-01-18 [1] CRAN (R 4.4.0)
+##  tzdb               0.5.0   2025-03-15 [1] CRAN (R 4.4.1)
+##  UCSC.utils         1.2.0   2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  urlchecker         1.0.1   2021-11-30 [1] CRAN (R 4.4.0)
+##  usethis          * 3.1.0   2024-11-26 [1] CRAN (R 4.4.1)
+##  utf8               1.2.6   2025-06-08 [1] CRAN (R 4.4.1)
+##  vctrs              0.6.5   2023-12-01 [1] CRAN (R 4.4.0)
+##  vegan              2.7-1   2025-06-05 [1] CRAN (R 4.4.1)
+##  withr              3.0.2   2024-10-28 [1] CRAN (R 4.4.1)
+##  xfun               0.52    2025-04-02 [1] CRAN (R 4.4.1)
+##  xtable             1.8-4   2019-04-21 [1] CRAN (R 4.4.0)
+##  XVector            0.46.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
+##  yaml               2.3.10  2024-07-26 [1] CRAN (R 4.4.0)
+##  zlibbioc           1.52.0  2024-10-29 [1] Bioconductor 3.20 (R 4.4.1)
 ## 
-##  [1] /Users/cab565/Library/R/x86_64/4.3/library
-##  [2] /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library
+##  [1] /Users/cab565/Library/R/x86_64/4.4/library
+##  [2] /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/library
+##  * ── Packages attached to the search path.
 ## 
 ## ──────────────────────────────────────────────────────────────────────────────
 ```

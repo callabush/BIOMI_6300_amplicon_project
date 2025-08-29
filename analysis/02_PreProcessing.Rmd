@@ -244,7 +244,7 @@ controlASV_physeq %>%
 control_taxa <-
 controlASV_physeq %>%
  tax_table() %>%
- data.frame()
+ data.frame() 
 
 
 write.csv(df, 'data/control_taxa.csv')
@@ -328,4 +328,5 @@ save(raw_preprocessed_physeq,
 # Ensure reproducibility 
 devtools::session_info()
 ```
+
 

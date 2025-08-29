@@ -39,7 +39,8 @@ set.seed(567890)
 ## Load Libraries 
 ```{r load-packages}
 
-pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,rstatix, ggpubr,
+pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq, rstatix, 
+               ggpubr,
                install = FALSE)
 ```
 
@@ -197,16 +198,91 @@ iNEXT_manual_df %>%
 # Diversity vs Gut Section 
 
 ```{r div-vs-, fig.height=3.5, fig.width=6}
+#### 
+# Stats
+obs_div_df <- 
+  iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed") 
+# check it
+glimpse(obs_div_df)
+
+
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 0)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+
+summary(wx_station_salinity)
+
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 1)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+
+summary(wx_station_salinity)
+
+# Pull out unique data from the three fractions of samples 
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 2)
+
+# Test of the data is normal for the continuous value of richness
+shapiro.test(obs_whole_rich_df$qD)
+# 	Shapiro-Wilk normality test
+# 
+# data:  obs_whole_rich_df$qD
+# W = 0.89554, p-value = 0.1629
+# Hill number data is normal we can use t-test
+wx_station_salinity <- 
+  obs_whole_rich_df %>%
+  wilcox_test(qD ~ gut_section) 
+
+# Look at it 
+wx_station_salinity
+
+summary(wx_station_salinity)
+#######
+# Plotting
+
+ indexes <- c("Richness", "Shannon Index", "Reverse Simpson Index")
+names(indexes) <- c("0", "1", "2")
 
 iNEXT_manual_df %>%
   dplyr::filter(Method == "Observed") %>%
   ggplot(aes(x = gut_section, y = qD)) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
-  facet_wrap(.~Order.q, scales = "free") + 
-  geom_point(aes(color = gut_section)) + 
+  facet_wrap(.~Order.q, scales = "free",  
+             labeller = labeller(Order.q = indexes)) + 
   stat_smooth() + 
-  labs(x = "Gut section", y = "# of ASVs") + 
-  scale_color_manual(values = gutsection_colors) + 
+  labs(x = "Section", y = "Alpha Diversity Measure") + 
   theme(legend.position = "bottom")
 
 ```

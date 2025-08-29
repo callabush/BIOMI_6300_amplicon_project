@@ -437,6 +437,10 @@ phylum_colors <- c(
 ```{r phylum-composition}
 # Goal is to calculate the phylum relative abundance
 # Note: the read depth must be normalized in some way: scaled_reads
+level_order <- 
+  c('568_4','E1_4','E2_4','E3_4','568_5', '581_5','611_5', 'E05_5', 'E1_5',
+    'E2_5', 'E3_5') 
+
 phylum_df <-
   scaled_rooted_physeq %>%
   # agglomerate at the phylum level
@@ -454,24 +458,28 @@ phylum_df <-
 phylum_df %>%
   # Warning: Its important to have one sample per x value,
   # Otherwise, it will take the sum between multiple samples
-  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  ggplot(aes(x = factor(names, level = level_order),
+             y = Abundance, fill = Phylum)) +
   facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
-  labs(title = "Gut Section Phylum Composition") + 
+  labs(title = "Gut Section Phylum Composition") +
   scale_fill_manual(values = phylum_colors) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
 
 # Plot Phylum Abundances - make sure to load phylum_colors
 phylum_df %>%
   # Warning: Its important to have one sample per x value,
   # Otherwise, it will take the sum between multiple samples
-  ggplot(aes(x = names, y = Abundance, fill = Phylum)) +
+  ggplot(aes(x = factor(names, level = level_order),
+             y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", color = "black") +
   labs(title = "Gut Section Phylum Composition") + 
   scale_fill_manual(values = phylum_colors) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+  labs(y ="Relative Abundance",x = "Sample")
 
 # Make each Phyla its own row
 #fixed scale
@@ -509,7 +517,7 @@ Bacteroidota_phylum <-
   labs(title = "Bacteroidota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
+  stat_compare_means(paired = FALSE)
 Bacteroidota_phylum
 
 # Cyanobacteria - y: abundance, x: gut section, dot plot + boxplot
@@ -525,7 +533,7 @@ Cyanobacteria_phylum <-
   labs(title = "Cyanobacteria Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
+  stat_compare_means(paired = FALSE)
 Cyanobacteria_phylum
 
 # Desulfobacterota - y: abundance, x: gut section, dot plot + boxplot
@@ -541,7 +549,7 @@ Desulfobacterota_phylum <-
   labs(title = "Desulfobacterota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
+  stat_compare_means()
 Desulfobacterota_phylum
 
 # Fibrobacterota - y: abundance, x: gut section, dot plot + boxplot
@@ -557,40 +565,40 @@ Fibrobacterota_phylum <-
   labs(title = "Fibrobacterota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
+  stat_compare_means()
 Fibrobacterota_phylum
 
 # Firmicutes - y: abundance, x: gut section, dot plot + boxplot
-Firmicutes_phylum <-
+Bacillota_phylum <-
   phylum_df %>%
-  dplyr::filter(Phylum == "Firmicutes") %>%
+  dplyr::filter(Phylum == "Bacillota") %>%
   # build the plot
   ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
   # outliers not plotted here in boxplot
   geom_jitter() +
   theme_bw() +
-  labs(title = "Firmicutes Phylum Abundance") +
+  labs(title = "Bacillota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
-Firmicutes_phylum
+  stat_compare_means()
+Bacillota_phylum
 
 # Proteobacteria - y: abundance, x: gut section, dot plot + boxplot
-Proteobacteria_phylum <-
+Pseudomonadota_phylum <-
   phylum_df %>%
-  dplyr::filter(Phylum == "Proteobacteria") %>%
+  dplyr::filter(Phylum == "Pseudomonadota") %>%
   # build the plot
   ggplot(aes(x = gut_section, y = Abundance, fill = gut_section, color = gut_section)) + 
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
   # outliers not plotted here in boxplot
   geom_jitter() +
   theme_bw() +
-  labs(title = "Proteobacteria Phylum Abundance") +
+  labs(title = "Pseudomonadota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
-Proteobacteria_phylum
+  stat_compare_means()
+Pseudomonadota_phylum
 
 # Spirochaetota- y: abundance, x: gut section, dot plot + boxplot
 Spirochaetota_phylum <-
@@ -604,7 +612,9 @@ Spirochaetota_phylum <-
   theme_bw() +
   labs(title = "Spirochaetota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
-  scale_fill_manual(values = gut_section_colors)
+  scale_fill_manual(values = gut_section_colors)+
+  stat_compare_means()
+Spirochaetota_phylum
 
 # Verrucomicrobiota - y: abundance, x: gut section, dot plot + boxplot
 Verrucomicrobiota_phylum <-
@@ -619,27 +629,150 @@ Verrucomicrobiota_phylum <-
   labs(title = "Verrucomicrobiota Phylum Abundance") +
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) +
-  stat_compare_means(method = "kruskal.test")
+  stat_compare_means()
 Verrucomicrobiota_phylum
 
 ```
 
-### Combine Phylum Graphs
-```{r combine-phylum-graphs, fig.width=10, fig.height=8}
-ggarrange(Bacteroidota_phylum, Cyanobacteria_phylum, Desulfobacterota_phylum, 
-          Fibrobacterota_phylum, Firmicutes_phylum, Proteobacteria_phylum,
-          Spirochaetota_phylum, Verrucomicrobiota_phylum)
+
+## Order
+```{r order-colors}
+# Set Order colors
+order_colors <- c(
+  Bacteroidales = "darkslategray2", 
+  Christensenellales = "gold",
+  "Clostridia vadinBB60 group" = "deeppink1",
+  Clostridiales = "limegreen",  
+  Cytophagales = "gray",
+  Desulfobacterales = "magenta4", 
+  Desulfovibrionales = "black",
+  Enterobacterales = "firebrick",
+  Fibrobacterales = "yellow",
+  Gastranaerophilales = "greenyellow",
+  Lachnospirales = "yellow4", 
+  Opitutales ="magenta",
+  Oscillospirales = "palevioletred1",
+  "P.palmC41"  = "orange3",
+  "Peptostreptococcales-Tissierellales" = "lightgreen",
+  Pseudomonadales = "purple2",
+  Spirochaetales = "royalblue",
+  Verrucomicrobiales  = "plum2",
+  Victivallales = "darkgray",
+  "WCHB1-41"=  "violetred"
+)
 ```
 
+```{r order-composition}
+Order_df <-
+  scaled_rooted_physeq %>%
+  # agglomerate at the phylum level
+  tax_glom(taxrank = "Order") %>%
+  # Transform counts to relative abundance
+  transform_sample_counts(function (x) {x/sum(x)}) %>%
+  # Melt to a long format
+  psmelt() %>%
+  # Filter out phyla that are less than one percent - get rid of low abundant Phyla
+  dplyr::filter(Abundance > 0.01)
 
+#section_IV <-
+#  c('568_4','E1_4','E2_4','E3_4')
+
+#section_IV_df <- filter(Order_df, names == c('568_4','E1_4','E2_4','E3_4') )
+
+#section_V <-
+#  c('568_5', '581_5','611_5', 'E05_5', 'E1_5', 'E2_5', 'E3_5')
+
+#section_V_df <- filter(Order_df, names == section_V )
+
+#save(Order_df, file = "data/05_community_analysis/ASV_counts_order.RData")
+
+#write.csv2(Order_df, file = "data/05_community_analysis/ASV_counts_order.csv")
+
+#write.table(Order_df, "data/05_community_analysis/ASV_counts_order.tsv",
+#            sep = "\t", quote = FALSE, col.names = NA)
+
+# Facet by gut section
+Order_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = names, y = Abundance, fill = Order)) +
+  facet_grid(.~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  #scale_fill_manual(values = order_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+
+level_order <- 
+  c('568_4','E1_4','E2_4','E3_4','568_5', '581_5','611_5', 'E05_5', 'E1_5', 'E2_5', 'E3_5') 
+
+Order_df %>%
+  # Warning: Its important to have one sample per x value,
+  # Otherwise, it will take the sum between multiple samples
+  ggplot(aes(x = factor(names, level = level_order), 
+             y = Abundance, fill = Order)) +
+  #facet_grid(.~gut_section) + 
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = order_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+  labs(y ="Relative Abundance",x = "Sample")
+
+# Section IV
+
+section_IV_df <- read.table("data/05_community_analysis/section_IV.tsv", sep = ",", skip = 1)
+
+head(section_IV_df)
+
+colnames(section_IV_df) <- c("", "OTU", "Sample", "Abundance", "names", 
+                             "host_species", "gut_section", "region","loction", "year",
+                             "month", "day", "sample_lab", "Time", "SL.mm.", "FL.mm.",
+                             "TW..g.", "GW..g.", "Sex", "Sample_or_Control", 
+                             "input", "filtered", "denoisedF", "denoisedR", 
+                             "merged", "nochim", "perc_reads_retained", "Kingdom",
+                             "Phylum", "Class", "Order")
+head(section_IV_df)
+
+section_IV_df %>%
+  ggplot(aes(x = names, 
+             y = Abundance, fill = Order)) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = order_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+  labs(y ="Relative Abundance",x = "Sample")
+
+# Section V
+
+section_V_df <- read.table("data/05_community_analysis/section_V.tsv", sep = ",", skip = 1)
+
+head(section_V_df)
+
+colnames(section_V_df) <- c("", "OTU", "Sample", "Abundance", "names", 
+                             "host_species", "gut_section", "region","loction", "year",
+                             "month", "day", "sample_lab", "Time", "SL.mm.", "FL.mm.",
+                             "TW..g.", "GW..g.", "Sex", "Sample_or_Control", 
+                             "input", "filtered", "denoisedF", "denoisedR", 
+                             "merged", "nochim", "perc_reads_retained", "Kingdom",
+                             "Phylum", "Class", "Order")
+head(section_V_df)
+
+section_V_df %>%
+  ggplot(aes(x = names, 
+             y = Abundance, fill = Order)) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_fill_manual(values = order_colors) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+  labs(y ="Relative Abundance",x = "Sample")
+```
 
 ## Genus
 
 ```{r genus-colors}
 # Set the phylum colors
 Genus_colors <- c(
-  Akkermansia = "navy", 
-  "Christensenellaceae R-7 group" = "darkslategray2", 
+  Akkermansia = "navy",  
+  "Christensenellaceae R-7 group" = "greenyellow", 
   Alistipes = "deeppink1",
   Aureibacter = "plum2", 
   Endozoicomonas = "gold", 
@@ -650,12 +783,12 @@ Genus_colors <- c(
   Epulopiscium = "limegreen",
   Ferrimonas = "grey", 
   Odoribacter ="magenta",
-  Rikenella = "greenyellow",
+  Rikenella = "darkslategray2",
   "Rikenellaceae RC9 gut group" = "yellow",
   Ruminococcus = "#B5D6AA",
   Romboutsia = "palevioletred1",
   Treponema = "royalblue",
-  Vibrio = "greenyellow",
+  Vibrio = "darkolivegreen1",
   Other = "darkgray")
 ```
 
@@ -683,16 +816,21 @@ Genus_df %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 
+level_order <- 
+  c('568_4','E1_4','E2_4','E3_4','568_5', '581_5','611_5', 'E05_5', 
+    'E1_5', 'E2_5', 'E3_5') 
 
 Genus_df %>%
   # Warning: Its important to have one sample per x value,
   # Otherwise, it will take the sum between multiple samples
-  ggplot(aes(x = names, y = Abundance, fill = Genus)) +
+  ggplot(aes(x = factor(names, level = level_order), 
+             y = Abundance, fill = Genus)) +
   #facet_grid(.~gut_section) + 
   geom_bar(stat = "identity", color = "black") +
   scale_fill_manual(values = Genus_colors) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1)) +
+  labs(y ="Relative Abundance", x = "Sample")
 
 # Bacteroidota
 Genus_df %>%
@@ -740,6 +878,9 @@ Genus_df %>%
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors)
 
+```
+
+```{r Genus-stats}
 # Akkermansia
 Genus_df %>%
   dplyr::filter(Genus == "Akkermansia") %>%
@@ -753,7 +894,8 @@ Genus_df %>%
   theme_bw() +
   labs(title = "Akkermansia Genus Abundance") +
   scale_color_manual(values = gut_section_colors) +
-  scale_fill_manual(values = gut_section_colors)
+  scale_fill_manual(values = gut_section_colors) #+
+  #stat_compare_means(paired = FALSE)
 
 
 # Desulfovibrio
@@ -769,7 +911,8 @@ Genus_df %>%
   theme_bw() +
   labs(title = "Desulfovibrio Genus Abundance") +
   scale_color_manual(values = gut_section_colors) +
-  scale_fill_manual(values = gut_section_colors) 
+  scale_fill_manual(values = gut_section_colors) +
+  stat_compare_means()
 
 
 # dg A -11 gut group
@@ -817,6 +960,18 @@ Genus_df %>%
   scale_color_manual(values = gut_section_colors) +
   scale_fill_manual(values = gut_section_colors) 
 ```
+
+
+# Downloading files
+```{r downloading-files}
+# Downloading otu_table and asv_otu tables for Esther
+
+write.csv(scaled_rooted_physeq@otu_table,
+          "data/05_community_analysis/otu_table.csv")
+write.csv(scaled_rooted_physeq@tax_table, 
+          "data/05_community_analysis/tax_table.csv")
+```
+
 
 # Session Information
 # For Reproducibility

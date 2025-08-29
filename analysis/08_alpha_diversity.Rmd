@@ -1,0 +1,190 @@
+---
+title: "Alpha Diversity"
+author: "Calla Bush St George"
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    code_folding: show
+    theme: spacelab
+    highlight: pygments
+    keep_md: yes
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+      toc_depth: 3
+  keep_md: true  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.align = "center",
+                      fig.path = "../figures/08_Alpha_Diversity/",
+                      dev = "png", dpi = 200) 
+
+# send any figure output to this folder 
+
+```
+
+# Setting the Environment 
+
+### Set my seed
+```{r set seed}
+# Any number can be chose
+set.seed(567890)
+```
+
+# Purpose
+
+To estimate biodiversity of our Pomacanthus sexstriatus samples. 
+We are not merging samples.
+
+# Load Packages and Functions
+```{r load-packages}
+# Load Packages
+pacman::p_load(phyloseq, iNEXT, ggpubr, microViz, dplyr, speedyseq, treeio, 
+               wesanderson, stringr, hillR, install = FALSE)
+
+# Install needed packages
+# if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+# install.packages("remotes")
+# remotes::install_github("david-barnett/microViz")
+# remotes::install_github("mikemc/speedyseq")
+# BiocManager::install("treeio")
+# install.packages("wesanderson")
+# install.packages("stringr")
+# install.packages("hillR")
+```
+
+# Load data (and metadata)
+```{r load-data}
+#load data
+load("data/03_Phylogenetic_Tree/phytree_preprocessed_physeq.RData")
+
+midroot_physeq
+
+#load metadata
+metadata_df <- 
+  read.csv("data/metadata.csv")
+
+# No shapes or colors dataframe to load
+```
+
+# Add metadata to phyloseq
+```{r add-metadata}
+# add rownames
+rownames(metadata_df) <- metadata_df$Names
+
+# turn metadata into sample data
+sam_data <- sample_data(metadata_df)
+
+# merge into new phyloseq object
+new_midroot_physeq <- merge_phyloseq(midroot_physeq, sam_data)
+
+#getting a lot of messages like "Found more than one class "phylo" in cache; using the first, from namespace 'phyloseq'; Also defined by ‘tidytree’"
+#recomendation is to ignore it or try out this message (the command below will silence the issues)
+options(getClass.msg=FALSE)
+```
+
+```{r no-zeros}
+# Get rid of any ASV with 0 taxa in phyloseq object
+new_midroot_physeq <- new_midroot_physeq %>% 
+  prune_taxa(taxa_sums(.) > 0, .)
+
+# Prepare data for iNEXT
+iNEXT_input_df <- new_midroot_physeq %>% 
+  otu_table() %>% 
+  data.frame
+
+# Now run iNEXT on unmerged dataset; this is slow alternatively we can use fun.gus but to be consistent with Sophia R i will run iNEXT this time
+
+
+# run iNEXT: command will take a long time 
+# iNEXT_unmerged <- iNEXT(iNEXT_input_df, q = c(0,1,2), datatype = "abundance")
+
+# save after running iNEXT_unmerged
+# save(iNEXT_unmerged, file = "data/05A_Biodiversity_SA/iNEXT_unmerged.RData")
+
+# load data
+load("data/04_Biodiversity/iNEXT_data.RData")
+
+# Preview iNext df
+head(iNEXT_data)
+
+# make it into a workable dataframe
+iNEXT_df <- 
+  iNEXT_data$AsyEst %>% 
+  dplyr::rename(names = Assemblage)
+
+colnames(iNEXT_df) <- sub("X", "", colnames(iNEXT_df$names))
+
+head(iNEXT_df)
+
+# add metadata to our dataframe
+iNEXT_df <- left_join(iNEXT_df, metadata_df, by = c("names" = "names"))
+```
+
+# Plot Diversity in Samples
+```{r sample-diversity}
+
+#now lets finally plot it!
+
+#1. plot rarefaction/extrapolation curve 
+rarefaction_plot <- 
+  ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
+#  scale_color_manual(values = iNEXT_color_df$solar_color) +
+ # scale_fill_manual(values = iNEXT_color_df$solar_color) +
+  theme(legend.position = "none") + 
+  labs(x = "Number of Sequences")
+
+rarefaction_plot
+
+# Now lets zoom in on rarefaction
+zoom_in_rarefaction <- 
+  ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q", se = FALSE) +
+  facet_wrap(~Order.q, scales= "free") +
+#  scale_color_manual(values = iNEXT_color_df$solar_color) +
+ # scale_fill_manual(values = iNEXT_color_df$solar_color) +
+  theme(legend.position = "none") + 
+  labs(x = "Number of Sequences")
+
+zoom_in_rarefaction
+```
+
+# Look into the observed diversity values and check them
+```{r observed-diversity}
+# Pull out information on Rarefaction 
+str(iNEXT_data$iNextEst$size_based)
+
+# Look into the observed diversity values and check them out
+observed_richness_df <- 
+  iNEXT_data$iNextEst$size_based %>% 
+  #extract richness from data
+  dplyr::filter(Order.q == 0) %>% 
+  dplyr::filter(Method == "Observed")
+
+observed_richness_df <- 
+  left_join(observed_richness_df, metadata_df, by = c("Assemblage" = "names"))
+
+# Manually plot rarefaction: using richness
+size_iNEXT <- iNEXT_data$iNextEst$size_based %>% 
+  #extract richness from data
+  dplyr::filter(Order.q == 0) %>% 
+  dplyr::filter(Method == "Rarefaction")
+
+size_iNEXT <- left_join(size_iNEXT, metadata_df, 
+                        by = c("Assemblage" = "names"))
+
+size_iNEXT %>%
+  ggplot(aes(x = m, y = qD, group = Assemblage)) +
+  geom_line() +
+  labs(x = "Number of Sequences", y = "Species Richness") +
+  facet_grid(~gut_section, scales = "free") +
+  geom_point(data = observed_richness_df, aes(x = m, y = qD)) #+
+  #scale_color_manual(values = solar_colors)
+
+```
+
