@@ -1,0 +1,25 @@
+ [1] "Neg1_R1.fastq.gz"       "Neg1_R2.fastq.gz"       "Neg2_R1.fastq.gz"  
+
+
+
+    
+ [4] "Neg2_R2.fastq.gz"       "SRR5331678_R1.fastq.gz" "SRR5331678_R2.fastq.gz"
+
+
+
+
+ [7] "SRR5331679_R1.fastq.gz" "SRR5331679_R2.fastq.gz" "SRR5331680_R1.fastq.gz"
+
+
+
+
+[10] "SRR5331680_R2.fastq.gz" "SRR5331681_R1.fastq.gz" "SRR5331681_R2.fastq.gz"
+
+
+
+[13] "SRR5331682_R1.fastq.gz" "SRR5331682_R2.fastq.gz" "SRR5331683_R1.fastq.gz"
+[16] "SRR5331683_R2.fastq.gz" "SRR5331684_R1.fastq.gz" "SRR5331684_R2.fastq.gz"
+[19] "SRR5331685_R1.fastq.gz" "SRR5331685_R2.fastq.gz" "SRR5331686_R1.fastq.gz"
+[22] "SRR5331686_R2.fastq.gz" "SRR5331687_R1.fastq.gz" "SRR5331687_R2.fastq.gz"
+[25] "SRR5331688_R1.fastq.gz" "SRR5331688_R2.fastq.gz" "SRR5331689_R1.fastq.gz"
+[28] "SRR5331689_R2.fastq.gz"
